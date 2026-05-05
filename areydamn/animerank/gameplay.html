@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Anidamn - Gameplay</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&amp;display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="shared.js"></script>
+    <script src="data.js"></script>
+    <style>
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .glass-input {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+  
+  .glass-panel {
+    background: rgba(31, 32, 32, 0.4);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+  }
+
+  .rounded-card {
+    border-radius: 0px;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+.attribute-box-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+}
+
+.attribute-box-inner.flip {
+  transform: rotateX(180deg);
+}
+
+.attribute-front, .attribute-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.attribute-back {
+  transform: rotateX(180deg);
+}
+
+.attr-container {
+    perspective: 1000px;
+    height: 90px;
+}
+    </style>
+    
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-highest": "#343535",
+                        "surface-dim": "#121414",
+                        "outline": "#8e9192",
+                        "on-error-container": "#ffdad6",
+                        "on-primary-fixed": "#1b1c1c",
+                        "on-secondary-fixed-variant": "#464747",
+                        "background": "#121414",
+                        "surface-container-low": "#1b1c1c",
+                        "surface-bright": "#393939",
+                        "outline-variant": "#444748",
+                        "tertiary-fixed": "#e2e2e2",
+                        "on-surface": "#e3e2e2",
+                        "on-secondary": "#303031",
+                        "tertiary": "#c6c6c6",
+                        "error-container": "#93000a",
+                        "primary-fixed-dim": "#c7c6c6",
+                        "on-primary-container": "#292a2a",
+                        "on-secondary-container": "#b6b5b5",
+                        "secondary": "#c7c6c6",
+                        "surface-container": "#1f2020",
+                        "primary-fixed": "#e3e2e2",
+                        "tertiary-container": "#919191",
+                        "secondary-fixed-dim": "#c7c6c6",
+                        "on-tertiary": "#303030",
+                        "inverse-primary": "#5e5e5e",
+                        "surface": "#121414",
+                        "surface-container-lowest": "#0d0e0f",
+                        "on-tertiary-container": "#2a2a2a",
+                        "inverse-surface": "#e3e2e2",
+                        "surface-variant": "#343535",
+                        "on-primary": "#303031",
+                        "on-error": "#690005",
+                        "on-background": "#e3e2e2",
+                        "surface-container-high": "#292a2a",
+                        "secondary-fixed": "#e3e2e2",
+                        "surface-tint": "#c7c6c6",
+                        "match-success": "#7fe27f", // Adding success color
+                        "match-partial": "#e2c57f" // Adding partial color
+                    },
+                    "fontFamily": {
+                        "inter": "Inter",
+                        "space-grotesk": "Space Grotesk",
+                        "body-lg": "Inter",
+                        "body-md": "Inter",
+                        "display-xl": "Space Grotesk",
+                        "headline-lg": "Space Grotesk",
+                        "headline-md": "Space Grotesk",
+                        "label-caps": "Space Grotesk"
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background min-h-screen relative overflow-x-hidden antialiased">
+    
+    <div id="particles-js" class="fixed inset-0 z-0 pointer-events-none opacity-40"></div>
+    <div class="fixed inset-0 z-0 pointer-events-none bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-tertiary-container/10 via-background to-background"></div>
+
+    <header class="fixed top-0 left-0 w-full z-50 transition-all duration-300 bg-surface/80 backdrop-blur-md border-b border-white/5">
+        <div class="max-w-[1440px] mx-auto px-6 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <div>
+                    <h1 class="font-headline-md text-2xl tracking-tighter uppercase text-on-surface">ANIDAMN</h1>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-6">
+                <!-- Modes Toggle -->
+                <div class="flex items-center bg-surface-variant p-1 rounded-full border border-white/10">
+                    <button id="daily-mode-btn" class="px-4 py-1.5 rounded-full font-label-caps text-xs transition-colors bg-white/10 text-on-surface">Daily</button>
+                    <button id="unlimited-mode-btn" class="px-4 py-1.5 rounded-full font-label-caps text-xs transition-colors text-outline hover:text-on-surface">Unlimited</button>
+                </div>
+                
+                <div class="flex items-center gap-2 px-3 py-1 bg-surface-container rounded-full border border-white/10">
+                    <span class="text-lg">🔥</span>
+                    <span id="streak-counter" class="font-space-grotesk font-bold text-sm">0</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="relative z-10 max-w-[960px] mx-auto px-4 md:px-8 pt-32 pb-32 min-h-screen flex flex-col items-center">
+        
+        <!-- Yesterday's Target Banner -->
+        <div id="yesterday-banner" class="hidden w-full max-w-2xl bg-surface-variant border border-white/10 rounded-xl p-4 mb-8 text-center flex-col items-center gap-2 animate-fade-in">
+            <span class="font-label-caps text-xs text-outline">Yesterday's Target</span>
+            <div class="flex items-center gap-4">
+                <img id="yesterday-img" src="" class="w-10 h-10 rounded-full object-cover">
+                <span id="yesterday-title" class="font-headline-md text-lg text-on-surface"></span>
+            </div>
+        </div>
+
+        <div class="w-full max-w-2xl text-center mb-12 flex flex-col gap-4">
+            <h2 class="font-display-xl text-5xl md:text-6xl tracking-tighter text-on-surface drop-shadow-lg">Guess the Anime</h2>
+            <p class="font-body-lg text-outline max-w-lg mx-auto">Type an anime title below. You have 10 tries to reveal the target based on 6 attributes.</p>
+        </div>
+
+        <!-- Search input container -->
+        <div class="w-full max-w-2xl relative mb-12">
+            <div class="relative group">
+                <input id="search-input" type="text" placeholder="Search for an anime..." class="w-full bg-surface-container-high/50 border border-outline-variant/50 focus:border-tertiary-fixed focus:ring-1 focus:ring-tertiary-fixed rounded-none p-6 pl-14 text-lg font-body-lg text-on-surface placeholder:text-outline transition-all glass-input">
+                <span class="material-symbols-outlined absolute left-5 top-1/2 -translate-y-1/2 text-outline group-focus-within:text-tertiary-fixed transition-colors">search</span>
+            </div>
+            
+            <div id="search-results" class="absolute top-full left-0 w-full mt-2 bg-surface-container-high border border-outline-variant/30 shadow-2xl rounded-xl overflow-hidden hidden z-50 flex flex-col max-h-[300px] overflow-y-auto">
+                <!-- Results dynamically populated here -->
+            </div>
+        </div>
+
+        <!-- Win/Loss Message Container -->
+        <div id="game-over-container" class="hidden w-full max-w-2xl mb-8 flex-col items-center justify-center p-8 bg-surface-container-highest border border-white/10 rounded-2xl animate-fade-in text-center">
+            <h3 id="game-over-title" class="font-display-xl text-4xl mb-4"></h3>
+            <p id="game-over-desc" class="font-body-lg text-outline mb-6"></p>
+            <div class="flex items-center gap-4">
+                <img id="target-reveal-img" src="" class="w-20 h-20 rounded-full object-cover shadow-lg border border-white/10">
+                <div class="text-left">
+                    <h4 id="target-reveal-name" class="font-headline-lg text-2xl text-on-surface"></h4>
+                </div>
+            </div>
+            <button id="play-again-btn" class="mt-8 px-8 py-3 bg-white text-black rounded-none font-label-caps uppercase tracking-widest hover:bg-white/90 transition-colors hidden">Play Again</button>
+        </div>
+
+        <!-- Guesses Container -->
+        <div id="guesses-container" class="w-full flex flex-col gap-8">
+            <!-- Dynamically populated -->
+        </div>
+
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>

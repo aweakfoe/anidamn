@@ -1,0 +1,677 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Anidamn - Anime Guessing Game</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+                "on-tertiary-fixed": "#1b1b1b",
+                "primary-fixed": "#e3e2e2",
+                "on-secondary": "#303031",
+                "on-primary-fixed": "#1b1c1c",
+                "on-background": "#e3e2e2",
+                "tertiary-container": "#919191",
+                "surface-variant": "#343535",
+                "on-secondary-container": "#b6b5b5",
+                "outline-variant": "#444748",
+                "surface-tint": "#c7c6c6",
+                "primary": "#c7c6c6",
+                "on-surface-variant": "#c4c7c7",
+                "tertiary-fixed": "#e2e2e2",
+                "tertiary": "#c6c6c6",
+                "on-tertiary-container": "#2a2a2a",
+                "secondary": "#c7c6c6",
+                "tertiary-fixed-dim": "#c6c6c6",
+                "background": "#121414",
+                "surface": "#121414",
+                "surface-container-low": "#1b1c1c",
+                "surface-dim": "#121414",
+                "secondary-fixed-dim": "#c7c6c6",
+                "on-tertiary-fixed-variant": "#474747",
+                "surface-container-high": "#292a2a",
+                "on-surface": "#e3e2e2",
+                "surface-container": "#1f2020",
+                "on-tertiary": "#303030",
+                "error": "#ffb4ab",
+                "primary-container": "#919090",
+                "primary-fixed-dim": "#c7c6c6",
+                "inverse-on-surface": "#303031",
+                "on-primary": "#303031",
+                "on-error": "#690005",
+                "on-primary-container": "#292a2a",
+                "on-primary-fixed-variant": "#464747",
+                "surface-bright": "#393939",
+                "on-secondary-fixed-variant": "#464747",
+                "inverse-primary": "#5e5e5e",
+                "on-secondary-fixed": "#1b1c1c",
+                "on-error-container": "#ffdad6",
+                "error-container": "#93000a",
+                "surface-container-highest": "#343535",
+                "surface-container-lowest": "#0d0e0f",
+                "secondary-container": "#464747",
+                "inverse-surface": "#e3e2e2",
+                "secondary-fixed": "#e3e2e2",
+                "outline": "#8e9192",
+                "match-success": "#7fe27f"
+        },
+        "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+        },
+        "spacing": {
+                "md": "16px",
+                "xs": "4px",
+                "unit": "4px",
+                "xl": "32px",
+                "gutter": "16px",
+                "lg": "24px",
+                "xxl": "48px",
+                "sm": "8px",
+                "margin": "24px"
+        },
+        "fontFamily": {
+                "body-lg": [
+                        "Inter"
+                ],
+                "headline-lg": [
+                        "Inter"
+                ],
+                "body-sm": [
+                        "Inter"
+                ],
+                "label-md": [
+                        "Inter"
+                ],
+                "headline-md": [
+                        "Inter"
+                ],
+                "label-sm": [
+                        "Inter"
+                ],
+                "headline-xl": [
+                        "Inter"
+                ],
+                "body-md": [
+                        "Inter"
+                ]
+        },
+        "fontSize": {
+                "body-lg": [
+                        "18px",
+                        {
+                                "lineHeight": "1.6",
+                                "fontWeight": "400"
+                        }
+                ],
+                "headline-lg": [
+                        "32px",
+                        {
+                                "lineHeight": "1.2",
+                                "letterSpacing": "-0.01em",
+                                "fontWeight": "700"
+                        }
+                ],
+                "body-sm": [
+                        "14px",
+                        {
+                                "lineHeight": "1.5",
+                                "fontWeight": "400"
+                        }
+                ],
+                "label-md": [
+                        "14px",
+                        {
+                                "lineHeight": "1",
+                                "letterSpacing": "0.05em",
+                                "fontWeight": "600"
+                        }
+                ],
+                "headline-md": [
+                        "24px",
+                        {
+                                "lineHeight": "1.3",
+                                "fontWeight": "600"
+                        }
+                ],
+                "label-sm": [
+                        "12px",
+                        {
+                                "lineHeight": "1",
+                                "letterSpacing": "0.02em",
+                                "fontWeight": "500"
+                        }
+                ],
+                "headline-xl": [
+                        "40px",
+                        {
+                                "lineHeight": "1.2",
+                                "letterSpacing": "-0.02em",
+                                "fontWeight": "700"
+                        }
+                ],
+                "body-md": [
+                        "16px",
+                        {
+                                "lineHeight": "1.6",
+                                "fontWeight": "400"
+                        }
+                ],
+                "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "700"}]
+        }
+},
+    },
+  }
+</script>
+<style>body {
+    background-color: #121414;
+    background-image: radial-gradient(circle at 10% 10%, rgba(255, 255, 255, 0.05) 0%, transparent 40%), radial-gradient(circle at 90% 90%, rgba(255, 255, 255, 0.05) 0%, transparent 40%);
+    min-height: 100vh;
+    color: #e3e2e2
+    }
+.frequency-wave {
+    mask-image: linear-gradient(to right, transparent, black, transparent);
+    opacity: 0.2
+    }
+.glass-card {
+    background: rgba(255, 255, 255, 0.02);
+    backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.03), transparent)
+    }
+.glow-button {
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease
+    }
+.glow-button:hover {
+    box-shadow: 0 0 35px rgba(255, 255, 255, 0.2);
+    transform: scale(1.02)
+    }
+.neon-filament {
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.4)
+    }
+.cinematic-hero-bg {
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), #121414), url(https://lh3.googleusercontent.com/aida/ADBb0ujBV2H_WGWH5v2dByET5tgHamc5_CldXaL0zFfU1DBjLr1PvsORtyxm7395AcrbvQVBVTx-3WnvxH_CBKT2KZcpNEx9lQStuCTrvgxTzDfUHWKOgsykbvboEmFKJDQrG-iEd_uvJxQgVy99OMzoMvYyQP-lNDYVTolpmuN5jVpj1J5OtCb08CUWfA3DLma-eP_xHmeo1x_n5lcPKuRqP9hvO2BlFZLwR-AR9u0FsyoACHeMMJfQqCLXf4g0QuD-TKMmIICzg05kgw);
+    background-size: cover;
+    background-position: center
+}
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+</style>
+</head>
+<body class="font-body-md overflow-x-hidden">
+<!-- Top Navigation -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-lg py-md max-w-[1200px] left-1/2 -translate-x-1/2 bg-surface/40 backdrop-blur-md">
+<div class="font-display-lg text-[24px] tracking-widest text-transparent bg-clip-text bg-gradient-to-b from-on-surface to-outline">ANIDAMN</div>
+<div class="flex items-center gap-md">
+<div class="flex items-center gap-xs">
+<button id="stats-btn" class="p-2 rounded-full hover:bg-white/5 transition-all active:scale-95" title="Statistics">
+<span class="material-symbols-outlined text-on-background">bar_chart</span>
+</button>
+<button id="login-btn" class="p-2 rounded-full hover:bg-white/5 transition-all active:scale-95 flex items-center gap-2" title="Register / Sign Up">
+<span id="user-icon" class="material-symbols-outlined text-on-background">person</span>
+<span id="user-name" class="hidden font-label-md text-on-surface"></span>
+</button>
+</div>
+</div>
+</header>
+<main class="relative">
+<!-- Hero Section with Background -->
+<section class="cinematic-hero-bg w-full pt-48 pb-24 px-lg flex flex-col items-center text-center relative">
+<!-- Frequency Wave Graphic -->
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-48 pointer-events-none frequency-wave flex items-center justify-center overflow-hidden">
+<svg class="w-full h-full text-surface-variant opacity-40" viewBox="0 0 1000 100">
+<path d="M0,50 Q25,0 50,50 T100,50 T150,50 T200,50 T250,50 T300,50 T350,50 T400,50 T450,50 T500,50 T550,50 T600,50 T650,50 T700,50 T750,50 T800,50 T850,50 T900,50 T950,50 T1000,50" fill="none" stroke="currentColor" stroke-width="1.5"></path>
+</svg>
+</div>
+<h1 class="font-display-lg text-[80px] md:text-[120px] leading-tight tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-on-surface to-surface-variant drop-shadow-[0_0_25px_rgba(255,255,255,0.2)] relative z-10">
+                ANIDAMN
+            </h1>
+<p class="font-body-lg text-on-surface mt-xs mb-lg max-w-lg opacity-90 drop-shadow-md">
+                10 guesses, 250+ anime. <br> Will you win today?
+            </p>
+<a href="gameplay.html" class="glow-button glass-card hover:bg-white/5 text-on-surface font-headline-md px-xl py-md rounded-full flex items-center gap-sm relative z-10 border border-white/20">
+<span class="material-symbols-outlined" data-weight="fill">play_arrow</span>
+                PLAY
+            </a>
+</section>
+<!-- Content Container -->
+<div class="pb-40 px-lg flex flex-col items-center max-w-6xl mx-auto text-center -mt-12 relative z-20">
+<!-- Yesterday's Section -->
+<section class="mb-20">
+<div class="glass-card flex items-center gap-sm px-6 py-3 rounded-full group cursor-pointer hover:border-white/10 transition-all">
+<span class="material-symbols-outlined text-on-surface group-hover:rotate-45 transition-transform duration-500">album</span>
+<span class="font-label-sm uppercase tracking-[0.2em] text-outline">Yesterday's Reveal</span>
+<div class="h-4 w-[1px] bg-white/10 mx-2"></div>
+<span id="landing-yesterday" class="text-on-surface font-semibold group-hover:text-primary transition-colors">Loading...</span>
+</div>
+</section>
+<div class="w-full grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch text-left">
+<!-- Anime Facts Section -->
+<section class="w-full h-full flex flex-col">
+<div class="glass-card rounded-2xl p-lg overflow-hidden relative flex-1 flex flex-col">
+<div class="flex justify-between items-center mb-md">
+<div class="flex items-center gap-xs bg-primary-container/20 text-primary px-3 py-1 rounded-full border border-primary/20">
+<span class="material-symbols-outlined text-sm">lightbulb</span>
+<span class="font-label-sm uppercase">Did you know?</span>
+</div>
+<div class="font-headline-md text-on-surface">10 Interesting Anime Facts</div>
+</div>
+
+<div class="flex flex-col gap-4 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+    <!-- Fact 1 -->
+    <div class="bg-surface-variant/30 border border-white/5 p-4 rounded-xl hover:bg-surface-variant/50 transition-colors">
+        <div class="flex items-start gap-4">
+            <div class="font-display-xl text-3xl text-outline-variant opacity-50 select-none">01</div>
+            <p class="font-body-md text-on-surface leading-relaxed"><strong class="text-primary">Spirited Away</strong> is the only anime film in history to win an Academy Award (Best Animated Feature in 2003).</p>
+        </div>
+    </div>
+    <!-- Fact 2 -->
+    <div class="bg-surface-variant/30 border border-white/5 p-4 rounded-xl hover:bg-surface-variant/50 transition-colors">
+        <div class="flex items-start gap-4">
+            <div class="font-display-xl text-3xl text-outline-variant opacity-50 select-none">02</div>
+            <p class="font-body-md text-on-surface leading-relaxed">The highest-grossing anime film of all time is <strong class="text-primary">Demon Slayer: Mugen Train</strong>, earning over $500 million worldwide.</p>
+        </div>
+    </div>
+    <!-- Fact 3 -->
+    <div class="bg-surface-variant/30 border border-white/5 p-4 rounded-xl hover:bg-surface-variant/50 transition-colors">
+        <div class="flex items-start gap-4">
+            <div class="font-display-xl text-3xl text-outline-variant opacity-50 select-none">03</div>
+            <p class="font-body-md text-on-surface leading-relaxed">Over <strong class="text-primary">60%</strong> of the world's animation-based entertainment is anime.</p>
+        </div>
+    </div>
+    <!-- Fact 4 -->
+    <div class="bg-surface-variant/30 border border-white/5 p-4 rounded-xl hover:bg-surface-variant/50 transition-colors">
+        <div class="flex items-start gap-4">
+            <div class="font-display-xl text-3xl text-outline-variant opacity-50 select-none">04</div>
+            <p class="font-body-md text-on-surface leading-relaxed"><strong class="text-primary">Sazae-san</strong> is the longest-running animated TV series in the world, with over 7,500 episodes since 1969.</p>
+        </div>
+    </div>
+    <!-- Fact 5 -->
+    <div class="bg-surface-variant/30 border border-white/5 p-4 rounded-xl hover:bg-surface-variant/50 transition-colors">
+        <div class="flex items-start gap-4">
+            <div class="font-display-xl text-3xl text-outline-variant opacity-50 select-none">05</div>
+            <p class="font-body-md text-on-surface leading-relaxed">The name <strong class="text-primary">Studio Ghibli</strong> comes from the Arabic word for "Mediterranean wind".</p>
+        </div>
+    </div>
+    <!-- Fact 6 -->
+    <div class="bg-surface-variant/30 border border-white/5 p-4 rounded-xl hover:bg-surface-variant/50 transition-colors">
+        <div class="flex items-start gap-4">
+            <div class="font-display-xl text-3xl text-outline-variant opacity-50 select-none">06</div>
+            <p class="font-body-md text-on-surface leading-relaxed">The titans in <strong class="text-primary">Attack on Titan</strong> are based on a drunk person the creator, Hajime Isayama, encountered in an internet cafe.</p>
+        </div>
+    </div>
+    <!-- Fact 7 -->
+    <div class="bg-surface-variant/30 border border-white/5 p-4 rounded-xl hover:bg-surface-variant/50 transition-colors">
+        <div class="flex items-start gap-4">
+            <div class="font-display-xl text-3xl text-outline-variant opacity-50 select-none">07</div>
+            <p class="font-body-md text-on-surface leading-relaxed"><strong class="text-primary">One Piece</strong> holds the Guinness World Record for the most copies published for the same comic book series by a single author.</p>
+        </div>
+    </div>
+    <!-- Fact 8 -->
+    <div class="bg-surface-variant/30 border border-white/5 p-4 rounded-xl hover:bg-surface-variant/50 transition-colors">
+        <div class="flex items-start gap-4">
+            <div class="font-display-xl text-3xl text-outline-variant opacity-50 select-none">08</div>
+            <p class="font-body-md text-on-surface leading-relaxed">The first anime to be broadcast in the United States was <strong class="text-primary">Astro Boy</strong> in 1963.</p>
+        </div>
+    </div>
+    <!-- Fact 9 -->
+    <div class="bg-surface-variant/30 border border-white/5 p-4 rounded-xl hover:bg-surface-variant/50 transition-colors">
+        <div class="flex items-start gap-4">
+            <div class="font-display-xl text-3xl text-outline-variant opacity-50 select-none">09</div>
+            <p class="font-body-md text-on-surface leading-relaxed"><strong class="text-primary">Death Note</strong> was briefly banned in parts of China because students were buying notebooks and writing their teachers' names in them.</p>
+        </div>
+    </div>
+    <!-- Fact 10 -->
+    <div class="bg-surface-variant/30 border border-white/5 p-4 rounded-xl hover:bg-surface-variant/50 transition-colors">
+        <div class="flex items-start gap-4">
+            <div class="font-display-xl text-3xl text-outline-variant opacity-50 select-none">10</div>
+            <p class="font-body-md text-on-surface leading-relaxed">The massive Pizza Hut product placements in <strong class="text-primary">Code Geass</strong> were part of a real-life marketing deal in Japan.</p>
+        </div>
+    </div>
+</div>
+
+</div>
+</section>
+
+<!-- Anime Quiz Section -->
+<section class="w-full h-full flex flex-col">
+<div class="glass-card rounded-2xl p-lg overflow-hidden relative text-left flex-1 flex flex-col">
+    <div class="flex justify-between items-center mb-md">
+        <div class="flex items-center gap-xs bg-tertiary-container/20 text-tertiary px-3 py-1 rounded-full border border-tertiary/20">
+            <span class="material-symbols-outlined text-sm">help</span>
+            <span class="font-label-sm uppercase">Mini Quiz</span>
+        </div>
+        <div class="font-headline-md text-on-surface">Anime Trivia</div>
+    </div>
+    <div id="quiz-container" class="bg-surface-variant/30 border border-white/5 p-6 rounded-xl relative min-h-[200px] flex flex-col justify-center transition-all duration-300">
+        <h3 id="quiz-question" class="font-headline-md text-xl text-on-surface mb-6 text-center">Loading Question...</h3>
+        <div id="quiz-options" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Options populated here -->
+        </div>
+        <div id="quiz-feedback" class="hidden mt-6 text-center font-label-md py-2 rounded-lg"></div>
+        <button id="quiz-next-btn" class="hidden mt-4 mx-auto bg-primary text-on-primary font-label-md px-6 py-2 rounded-full hover:opacity-90 transition-opacity">Next Question</button>
+    </div>
+</div>
+</div>
+</section>
+</div>
+
+</div>
+</main>
+<!-- Bottom Navigation (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-safe h-20 bg-surface-container-low/80 backdrop-blur-xl border-t border-white/5 shadow-2xl rounded-t-xl">
+<a class="flex flex-col items-center justify-center bg-surface-variant/50 text-on-surface rounded-xl px-4 py-2 active:scale-110 duration-200" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: &quot;FILL&quot; 1;">videogame_asset</span>
+<span class="font-label-sm">Game</span>
+</a>
+<a class="flex flex-col items-center justify-center text-outline p-2 hover:text-on-surface transition-all" href="#">
+<span class="material-symbols-outlined">bar_chart</span>
+<span class="font-label-sm">Stats</span>
+</a>
+<a class="flex flex-col items-center justify-center text-outline p-2 hover:text-on-surface transition-all" href="#">
+<span class="material-symbols-outlined">emoji_events</span>
+<span class="font-label-sm">Ranks</span>
+</a>
+<a class="flex flex-col items-center justify-center text-outline p-2 hover:text-on-surface transition-all" href="#">
+<span class="material-symbols-outlined">info</span>
+<span class="font-label-sm">About</span>
+</a>
+</nav>
+<!-- Background Decorative Blurs -->
+<div class="fixed top-[-10%] left-[-10%] w-[40%] h-[40%] bg-white/5 rounded-full blur-[120px] pointer-events-none"></div>
+<div class="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-white/5 rounded-full blur-[120px] pointer-events-none"></div>
+
+<!-- Stats Modal -->
+<div id="stats-modal" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm hidden animate-fade-in opacity-0 transition-opacity duration-300">
+    <div class="glass-card bg-surface/90 border border-white/10 rounded-2xl p-8 max-w-sm w-full mx-4 text-center relative">
+        <button id="close-stats-btn" class="absolute top-4 right-4 p-1 hover:text-white text-outline transition-colors">
+            <span class="material-symbols-outlined">close</span>
+        </button>
+        <h2 class="font-headline-md text-2xl mb-6 text-on-surface">Your Statistics</h2>
+        <div class="flex justify-around mb-8">
+            <div class="flex flex-col items-center">
+                <span id="stats-total-played" class="font-display-lg text-4xl text-primary">0</span>
+                <span class="font-label-sm uppercase tracking-widest text-outline mt-2">Played</span>
+            </div>
+            <div class="flex flex-col items-center">
+                <span id="stats-current-streak" class="font-display-lg text-4xl text-match-success">0</span>
+                <span class="font-label-sm uppercase tracking-widest text-outline mt-2">Streak</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Login Modal -->
+<div id="login-modal" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm hidden animate-fade-in opacity-0 transition-opacity duration-300">
+    <div class="glass-card bg-surface/90 border border-white/10 rounded-2xl p-8 max-w-sm w-full mx-4 relative">
+        <button id="close-login-btn" class="absolute top-4 right-4 p-1 hover:text-white text-outline transition-colors">
+            <span class="material-symbols-outlined">close</span>
+        </button>
+        <h2 id="login-title" class="font-headline-md text-2xl mb-6 text-on-surface text-center">Sign In</h2>
+        
+        <form id="login-form" class="flex flex-col gap-4">
+            <div>
+                <label class="font-label-sm text-outline mb-1 block">Username</label>
+                <input id="login-username" type="text" required class="w-full bg-surface-variant border border-white/10 rounded-lg px-4 py-2 text-on-surface focus:outline-none focus:border-primary transition-colors">
+            </div>
+            <div>
+                <label class="font-label-sm text-outline mb-1 block">Password</label>
+                <input id="login-password" type="password" required class="w-full bg-surface-variant border border-white/10 rounded-lg px-4 py-2 text-on-surface focus:outline-none focus:border-primary transition-colors">
+            </div>
+            <button type="submit" class="mt-4 bg-primary text-on-primary font-label-md py-2.5 rounded-lg hover:opacity-90 transition-opacity">Submit</button>
+            <p class="text-center font-body-sm text-outline mt-4">
+                <span id="login-toggle-text">Don't have an account?</span> 
+                <a href="#" id="login-toggle-link" class="text-primary hover:underline">Register</a>
+            </p>
+            <p class="text-center font-body-sm text-outline mt-2">
+                <a href="#" id="forgot-password-link" class="text-error/80 hover:text-error hover:underline transition-colors text-xs">Forgot password? (Clear mock accounts)</a>
+            </p>
+        </form>
+    </div>
+</div>
+
+<script src="shared.js"></script>
+<script src="data.js"></script>
+<script>
+    if (typeof ALL_ANIME_DATA !== 'undefined' && typeof getYesterdayTarget !== 'undefined') {
+        const yTarget = getYesterdayTarget(ALL_ANIME_DATA);
+        if (yTarget) {
+            document.getElementById('landing-yesterday').textContent = yTarget.title;
+        }
+    }
+
+    // Stats Modal Logic
+    const statsBtn = document.getElementById('stats-btn');
+    const statsModal = document.getElementById('stats-modal');
+    const closeStatsBtn = document.getElementById('close-stats-btn');
+    const totalPlayedEl = document.getElementById('stats-total-played');
+    const streakEl = document.getElementById('stats-current-streak');
+
+    statsBtn.addEventListener('click', () => {
+        const total = localStorage.getItem('total_games_played') || '0';
+        const streak = localStorage.getItem('daily_streak') || '0';
+        totalPlayedEl.textContent = total;
+        streakEl.textContent = streak;
+        
+        statsModal.classList.remove('hidden');
+        // trigger reflow
+        void statsModal.offsetWidth;
+        statsModal.classList.remove('opacity-0');
+    });
+
+    function closeStats() {
+        statsModal.classList.add('opacity-0');
+        setTimeout(() => statsModal.classList.add('hidden'), 300);
+    }
+
+    closeStatsBtn.addEventListener('click', closeStats);
+    statsModal.addEventListener('click', (e) => {
+        if (e.target === statsModal) closeStats();
+    });
+
+    // Login/Register Logic
+    const loginBtn = document.getElementById('login-btn');
+    const loginModal = document.getElementById('login-modal');
+    const closeLoginBtn = document.getElementById('close-login-btn');
+    const loginForm = document.getElementById('login-form');
+    const usernameInput = document.getElementById('login-username');
+    const userIcon = document.getElementById('user-icon');
+    const userNameSpan = document.getElementById('user-name');
+    const loginTitle = document.getElementById('login-title');
+    const loginToggleLink = document.getElementById('login-toggle-link');
+    const loginToggleText = document.getElementById('login-toggle-text');
+    let isRegistering = false;
+
+    // Check logged in state
+    function checkLoginState() {
+        const currentUser = localStorage.getItem('current_user');
+        if (currentUser) {
+            userIcon.textContent = 'account_circle';
+            userNameSpan.textContent = currentUser;
+            userNameSpan.classList.remove('hidden');
+        } else {
+            userIcon.textContent = 'person';
+            userNameSpan.classList.add('hidden');
+        }
+    }
+    checkLoginState();
+
+    loginBtn.addEventListener('click', () => {
+        const currentUser = localStorage.getItem('current_user');
+        if (currentUser) {
+            // Logout
+            if (confirm(`Logout from ${currentUser}?`)) {
+                localStorage.removeItem('current_user');
+                checkLoginState();
+            }
+            return;
+        }
+        
+        loginModal.classList.remove('hidden');
+        void loginModal.offsetWidth;
+        loginModal.classList.remove('opacity-0');
+    });
+
+    function closeLogin() {
+        loginModal.classList.add('opacity-0');
+        setTimeout(() => loginModal.classList.add('hidden'), 300);
+    }
+
+    closeLoginBtn.addEventListener('click', closeLogin);
+    loginModal.addEventListener('click', (e) => {
+        if (e.target === loginModal) closeLogin();
+    });
+
+    loginToggleLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        isRegistering = !isRegistering;
+        loginTitle.textContent = isRegistering ? "Create Account" : "Sign In";
+        loginToggleText.textContent = isRegistering ? "Already have an account?" : "Don't have an account?";
+        loginToggleLink.textContent = isRegistering ? "Sign In" : "Register";
+    });
+
+    document.getElementById('forgot-password-link').addEventListener('click', (e) => {
+        e.preventDefault();
+        if (confirm("This will clear all registered accounts from local storage so you can start fresh. Continue?")) {
+            localStorage.removeItem('registered_users');
+            alert("Accounts cleared! You can now register a new account.");
+        }
+    });
+
+    loginForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const username = usernameInput.value.trim();
+        const password = document.getElementById('login-password').value;
+        if (!username || !password) return;
+
+        let users = JSON.parse(localStorage.getItem('registered_users') || '{}');
+
+        if (isRegistering) {
+            if (users[username]) {
+                alert("Username already exists! Please Sign In instead.");
+                return;
+            }
+            users[username] = password;
+            localStorage.setItem('registered_users', JSON.stringify(users));
+            alert("Registration successful! Logging you in...");
+        } else {
+            if (!users[username] || users[username] !== password) {
+                alert("Invalid username or password.");
+                return;
+            }
+        }
+
+        localStorage.setItem('current_user', username);
+        checkLoginState();
+        closeLogin();
+        usernameInput.value = '';
+        document.getElementById('login-password').value = '';
+    });
+
+    // Quiz Logic
+    const quizData = [
+        { q: "In Naruto, what is the name of the Nine-Tails fox?", options: ["Shukaku", "Kurama", "Matatabi", "Son Goku"], a: 1 },
+        { q: "What is the highest bounty ever known in One Piece?", options: ["Gol D. Roger", "Whitebeard", "Kaido", "Shanks"], a: 0 },
+        { q: "In Fullmetal Alchemist, what is the ultimate taboo among Alchemists?", options: ["Gold Transmutation", "Human Transmutation", "Soul Binding", "Time Transmutation"], a: 1 },
+        { q: "What is the name of the protagonist in Bleach?", options: ["Naruto Uzumaki", "Monkey D. Luffy", "Ichigo Kurosaki", "Edward Elric"], a: 2 },
+        { q: "In Attack on Titan, what is the name of Eren's Titan form?", options: ["Colossal Titan", "Armored Titan", "Attack Titan", "Beast Titan"], a: 2 }
+    ];
+
+    let currentQuizIndex = 0;
+    let quizScore = 0;
+
+    const quizQuestionEl = document.getElementById('quiz-question');
+    const quizOptionsEl = document.getElementById('quiz-options');
+    const quizFeedbackEl = document.getElementById('quiz-feedback');
+    const quizNextBtn = document.getElementById('quiz-next-btn');
+
+    function loadQuizQuestion() {
+        quizFeedbackEl.classList.add('hidden');
+        quizNextBtn.classList.add('hidden');
+        quizOptionsEl.innerHTML = '';
+        
+        if (currentQuizIndex >= quizData.length) {
+            quizQuestionEl.textContent = `Quiz Complete! You scored ${quizScore} out of ${quizData.length}.`;
+            const restartBtn = document.createElement('button');
+            restartBtn.textContent = "Restart Quiz";
+            restartBtn.className = "mt-4 mx-auto bg-primary text-on-primary font-label-md px-6 py-2 rounded-full hover:opacity-90 transition-opacity";
+            restartBtn.onclick = () => {
+                currentQuizIndex = 0;
+                quizScore = 0;
+                loadQuizQuestion();
+            };
+            quizOptionsEl.appendChild(restartBtn);
+            quizOptionsEl.className = "flex justify-center";
+            return;
+        }
+
+        quizOptionsEl.className = "grid grid-cols-1 md:grid-cols-2 gap-4";
+        const qData = quizData[currentQuizIndex];
+        quizQuestionEl.textContent = `Q${currentQuizIndex + 1}: ${qData.q}`;
+
+        qData.options.forEach((opt, idx) => {
+            const btn = document.createElement('button');
+            btn.textContent = opt;
+            btn.className = "w-full text-left bg-surface-container hover:bg-white/10 border border-white/5 p-4 rounded-xl font-body-md text-on-surface transition-colors";
+            btn.onclick = () => handleQuizAnswer(idx, btn, qData.a);
+            quizOptionsEl.appendChild(btn);
+        });
+    }
+
+    function handleQuizAnswer(selectedIndex, btnElement, correctIndex) {
+        // Disable all buttons
+        const buttons = quizOptionsEl.querySelectorAll('button');
+        buttons.forEach(b => {
+            b.disabled = true;
+            b.classList.remove('hover:bg-white/10');
+            b.classList.add('opacity-50', 'cursor-default');
+        });
+
+        // Show feedback
+        quizFeedbackEl.classList.remove('hidden');
+        if (selectedIndex === correctIndex) {
+            btnElement.classList.remove('bg-surface-container', 'border-white/5', 'opacity-50');
+            btnElement.classList.add('bg-match-success/20', 'border-match-success', 'text-match-success', 'opacity-100');
+            quizFeedbackEl.textContent = "Correct!";
+            quizFeedbackEl.className = "mt-6 text-center font-label-md py-2 rounded-lg bg-match-success/20 text-match-success border border-match-success/30";
+            quizScore++;
+        } else {
+            btnElement.classList.remove('bg-surface-container', 'border-white/5', 'opacity-50');
+            btnElement.classList.add('bg-error/20', 'border-error', 'text-error', 'opacity-100');
+            buttons[correctIndex].classList.remove('bg-surface-container', 'border-white/5', 'opacity-50');
+            buttons[correctIndex].classList.add('bg-match-success/20', 'border-match-success', 'text-match-success', 'opacity-100');
+            quizFeedbackEl.textContent = "Incorrect!";
+            quizFeedbackEl.className = "mt-6 text-center font-label-md py-2 rounded-lg bg-error/20 text-error border border-error/30";
+        }
+
+        quizNextBtn.classList.remove('hidden');
+    }
+
+    quizNextBtn.addEventListener('click', () => {
+        currentQuizIndex++;
+        loadQuizQuestion();
+    });
+
+    // Init Quiz
+    loadQuizQuestion();
+</script>
+</body></html>
