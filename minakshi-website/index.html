@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top Secret Document</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Gaegu:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Main Styles -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Background Music -->
+    <audio id="bg-music" loop>
+        <source src="https://assets.mixkit.co/music/preview/mixkit-beautiful-dream-493.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <!-- UI Controls -->
+    <div class="controls">
+        <button id="music-toggle" class="btn-icon">🎵 Play Music</button>
+        <div id="humor-counter" class="hidden">Humor Level: Almost as high as mine (but not quite)</div>
+    </div>
+
+    <!-- Floating Hearts Container -->
+    <div id="hearts-container"></div>
+
+    <!-- App Container (holds all pages) -->
+    <div id="app">
+        
+        <!-- Page 0: Landing -->
+        <section class="page active" id="landing">
+            <div class="card warning-card">
+                <h1>TOP SECRET</h1>
+                <h2>A Formal List of Reasons Why I Cannot Stand Minakshi</h2>
+                <div class="warning-icon">⚠️</div>
+                <button class="btn start-btn" onclick="nextPage(1)">Start at your own risk <span class="spin-heart">💖</span></button>
+            </div>
+        </section>
+
+        <!-- Page 1 -->
+        <section class="page" id="page-1">
+            <div class="card cute-card">
+                <h2>Reason #1</h2>
+                <p>You ghost me then spawn back into my life like a video game character.</p>
+                <img src="https://media.tenor.com/bK1R3l_8e8QAAAAC/spongebob-squarepants-spongebob.gif" alt="SpongeBob Waiting" class="meme">
+                <button class="btn next-btn" onclick="nextPage(2)">Next Reason ➡️</button>
+            </div>
+        </section>
+
+        <!-- Page 2 -->
+        <section class="page" id="page-2">
+            <div class="card cute-card">
+                <h2>Reason #2</h2>
+                <p>Thick thighs.</p>
+                <img src="https://media.tenor.com/p511A9uO-gUAAAAC/lord-have-mercy-meme.gif" alt="Lord Have Mercy" class="meme">
+                <button class="btn next-btn" onclick="nextPage(3)">Next Reason ➡️</button>
+            </div>
+        </section>
+
+        <!-- Page 3 -->
+        <section class="page" id="page-3">
+            <div class="card cute-card">
+                <h2>Reason #3</h2>
+                <p>You’re too cute, it’s distracting.</p>
+                <img src="https://media.tenor.com/tHqgU7-X26MAAAAC/cat-heart-eyes.gif" alt="Cat Heart Eyes" class="meme">
+                <button class="btn next-btn" onclick="nextPage(4)">Next Reason ➡️</button>
+            </div>
+        </section>
+
+        <!-- Page 4 -->
+        <section class="page" id="page-4">
+            <div class="card cute-card">
+                <h2>Reason #4</h2>
+                <p>You’re funny.</p>
+                <img src="https://media.tenor.com/R3aB5uJp6iUAAAAC/wait-a-minute-who-are-you.gif" alt="Wait Actually" class="meme">
+                <button class="btn next-btn" onclick="nextPage(5)">Next Reason ➡️</button>
+            </div>
+        </section>
+
+        <!-- Page 5 -->
+        <section class="page" id="page-5">
+            <div class="card cute-card">
+                <h2>Reason #5</h2>
+                <p>You’re still funny.</p>
+                <img src="https://media.tenor.com/b2tIq_2oBGEAAAAC/spider-man-pointing.gif" alt="Spider-Man pointing" class="meme">
+                <button class="btn next-btn" onclick="nextPage(6)">Next Reason ➡️</button>
+            </div>
+        </section>
+
+        <!-- Page 6 -->
+        <section class="page" id="page-6">
+            <div class="card cute-card">
+                <h2>Reason #6</h2>
+                <p>Okay, you’re actually funny.</p>
+                <img src="https://media.tenor.com/wO_I4D55o9YAAAAC/clown-putting-on-makeup.gif" alt="Professional Clown" class="meme">
+                <button class="btn next-btn" id="chasing-btn" onclick="nextPage(7)">Next Reason ➡️</button>
+            </div>
+        </section>
+
+        <!-- Page 7: Reveal -->
+        <section class="page" id="page-7">
+            <div class="card cute-card reveal-card">
+                <h2>The Truth</h2>
+                <p>Aur kitna dekhegi? Bata diya naa you are funny! 👿👿</p>
+                <img src="https://media.tenor.com/hQzHWsK6j9sAAAAC/angry-cat-no.gif" alt="Angry Cat" class="meme">
+                <button class="btn start-btn mt-4" onclick="nextPage(0)">Now go back to the start 🔄</button>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Main Script -->
+    <script src="script.js"></script>
+</body>
+</html>

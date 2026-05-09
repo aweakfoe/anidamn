@@ -1,0 +1,267 @@
+:root {
+    --soft-pink: #FFC0CB;
+    --deep-red: #8B0000;
+    --card-bg: rgba(255, 255, 255, 0.9);
+    --text-color: #333;
+    --font-heading: 'Fredoka One', cursive;
+    --font-body: 'Gaegu', cursive;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-body);
+    background-color: var(--soft-pink);
+    /* Scrapbook texture using repeating linear gradients to look like a grid/paper */
+    background-image: 
+        linear-gradient(rgba(255, 255, 255, 0.4) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.4) 1px, transparent 1px);
+    background-size: 20px 20px;
+    color: var(--text-color);
+    overflow: hidden; /* Hide scrollbars for SPA feel */
+    height: 100vh;
+    width: 100vw;
+}
+
+/* UI Controls */
+.controls {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.btn-icon {
+    background: var(--card-bg);
+    border: 2px solid var(--deep-red);
+    color: var(--deep-red);
+    padding: 8px 12px;
+    border-radius: 20px;
+    font-family: var(--font-body);
+    font-weight: bold;
+    font-size: 1.1rem;
+    cursor: pointer;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+    transition: all 0.2s ease;
+}
+
+.btn-icon:hover {
+    background: var(--deep-red);
+    color: white;
+}
+
+#humor-counter {
+    background: var(--deep-red);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 1.2rem;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+    animation: popIn 0.5s ease;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Floating Hearts */
+#hearts-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.heart {
+    position: absolute;
+    color: var(--deep-red);
+    font-size: 20px;
+    opacity: 0.7;
+    animation: floatUp 4s linear forwards;
+}
+
+@keyframes floatUp {
+    0% { transform: translateY(0) scale(1); opacity: 0.8; }
+    100% { transform: translateY(-100vh) scale(1.5) rotate(45deg); opacity: 0; }
+}
+
+/* App & Pages */
+#app {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+}
+
+.page {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.5s ease-in-out;
+    transform: translateY(50px);
+}
+
+.page.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.page.slide-out {
+    transform: translateY(-50px);
+    opacity: 0;
+}
+
+/* Cards */
+.card {
+    background: var(--card-bg);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 5px 5px 15px rgba(0,0,0,0.1),
+                -5px -5px 15px rgba(255,255,255,0.5);
+    max-width: 500px;
+    width: 100%;
+    text-align: center;
+    position: relative;
+}
+
+/* Add a scrapbook tape effect */
+.card::before {
+    content: '';
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-2deg);
+    width: 100px;
+    height: 30px;
+    background: rgba(255, 255, 255, 0.6);
+    box-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+}
+
+/* Typography inside cards */
+h1 {
+    font-family: var(--font-heading);
+    color: var(--deep-red);
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    line-height: 1.2;
+}
+
+h2 {
+    font-family: var(--font-heading);
+    color: var(--deep-red);
+    font-size: 2rem;
+    margin-bottom: 15px;
+}
+
+p {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    color: var(--text-color);
+}
+
+/* Memes */
+.meme {
+    max-width: 100%;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
+    max-height: 300px;
+    object-fit: contain;
+}
+
+/* Buttons */
+.btn {
+    background: var(--soft-pink);
+    border: 2px solid var(--deep-red);
+    color: var(--deep-red);
+    padding: 12px 25px;
+    border-radius: 30px;
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
+}
+
+.btn:hover {
+    background: var(--deep-red);
+    color: white;
+    transform: scale(1.05);
+}
+
+.start-btn {
+    font-size: 1.3rem;
+    margin-top: 15px;
+}
+
+.mt-4 {
+    margin-top: 20px;
+}
+
+/* Animations */
+.spin-heart {
+    display: inline-block;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes popIn {
+    0% { transform: scale(0); }
+    80% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+/* Landing Page Specific */
+.warning-card {
+    border: 5px solid var(--deep-red);
+    background-color: #fff0f0;
+}
+.warning-icon {
+    font-size: 4rem;
+    margin: 15px 0;
+    animation: pulse 1s infinite alternate;
+}
+
+@keyframes pulse {
+    from { transform: scale(1); }
+    to { transform: scale(1.1); }
+}
+
+/* Chasing Button */
+#chasing-btn {
+    position: relative;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    h1 { font-size: 2rem; }
+    h2 { font-size: 1.5rem; }
+    p { font-size: 1.2rem; }
+    .card { padding: 20px; width: 90%; }
+    .controls { top: 10px; left: 10px; }
+    #humor-counter { font-size: 1rem; }
+}

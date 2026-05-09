@@ -291,15 +291,8 @@ function compareAttr(guessVal, targetVal, type) {
 }
 
 function createBox(label, value, compResult, delayIdx, isRestoring) {
-    // Colors:
-    // match: bg-[#7fe27f] text-black
-    // partial: bg-[#e2c57f] text-black
-    // miss: bg-surface-variant text-on-surface
-    
-    let frontClass = "bg-surface-variant border border-white/5";
-    let backClass = compResult.status === 'match' ? "bg-[#7fe27f] text-black border border-white/5" :
-                    compResult.status === 'partial' ? "bg-[#e2c57f] text-black border border-white/5" :
-                    "bg-surface-variant border border-white/5 text-on-surface";
+    let frontClass = "border border-red-900/50 shadow-[0_0_10px_rgba(0,0,0,0.5)]";
+    let backClass = "border border-red-900/50 shadow-[0_0_10px_rgba(0,0,0,0.5)]";
                     
     let arrowHtml = '';
     if(compResult.arrow === 'up') arrowHtml = `<span class="material-symbols-outlined text-lg">arrow_upward</span>`;
@@ -307,16 +300,27 @@ function createBox(label, value, compResult, delayIdx, isRestoring) {
 
     const delay = isRestoring ? '0s' : `${delayIdx * 0.1}s`;
     
+    // Tint overlay for back side depending on match status
+    let overlayClass = compResult.status === 'match' ? 'bg-green-600/60' :
+                       compResult.status === 'partial' ? 'bg-yellow-600/60' :
+                       'bg-black/70';
+                       
+    let textColor = compResult.status === 'miss' ? 'text-white' : 'text-white drop-shadow-md';
+    let labelColor = compResult.status === 'miss' ? 'text-gray-400' : 'text-gray-200';
+    
     return `
     <div class="attr-container rounded-xl">
         <div class="attribute-box-inner ${isRestoring ? 'flip' : 'animate-flip'}" style="${!isRestoring ? `animation-delay: ${delay};` : ''}">
-            <div class="attribute-front rounded-xl ${frontClass}">
-                <span class="font-label-sm text-xs text-outline uppercase tracking-wider mb-1">${label}</span>
-                <span class="material-symbols-outlined text-outline/50 text-3xl">help</span>
+            <div class="attribute-front rounded-xl ${frontClass} bg-cover bg-center overflow-hidden" style="background-image: url('smallboxes.png');">
+                <div class="absolute inset-0 bg-black/60"></div>
+                <span class="font-label-sm text-xs text-red-200/50 uppercase tracking-wider mb-1 relative z-10">${label}</span>
+                <span class="material-symbols-outlined text-red-500/50 text-3xl relative z-10">help</span>
             </div>
-            <div class="attribute-back rounded-xl ${backClass}">
-                <span class="font-label-sm text-xs opacity-70 uppercase tracking-wider mb-1">${label}</span>
-                <div class="flex items-center gap-1 font-body-md font-semibold">
+            <div class="attribute-back rounded-xl ${backClass} bg-cover bg-center overflow-hidden" style="background-image: url('smallboxes.png');">
+                <div class="absolute inset-0 ${overlayClass} mix-blend-multiply"></div>
+                <div class="absolute inset-0 ${overlayClass} opacity-50"></div>
+                <span class="font-label-sm text-xs ${labelColor} uppercase tracking-wider mb-1 relative z-10">${label}</span>
+                <div class="flex items-center gap-1 font-body-md font-semibold relative z-10 ${textColor}">
                     ${value} ${arrowHtml}
                 </div>
             </div>
@@ -337,11 +341,12 @@ function makeGuess(anime, isRestoring = false) {
     const cStudio = { status: anime.studio === targetAnime.studio ? 'match' : 'miss', arrow: ''};
 
     const card = document.createElement('div');
-    card.className = "glass-panel rounded-card p-6 md:p-8 flex flex-col gap-6 w-full relative overflow-hidden";
+    card.className = "glass-panel rounded-card p-6 md:p-8 flex flex-col gap-6 w-full relative overflow-hidden border border-red-900/40 shadow-[0_0_20px_rgba(0,0,0,0.6)] bg-cover bg-center";
+    card.style.backgroundImage = "url('bigbox.png')";
     if(!isRestoring) card.classList.add('animate-fade-in');
     
     card.innerHTML = `
-    <div class="absolute inset-0 bg-gradient-to-b from-white/[0.02] to-transparent pointer-events-none"></div>
+    <div class="absolute inset-0 bg-black/60 pointer-events-none backdrop-blur-[2px]"></div>
     <div class="flex items-center gap-6 relative z-10">
         <div class="w-16 h-16 rounded-full overflow-hidden border border-white/10 shadow-lg shrink-0">
             <img src="${anime.imageUrl}" class="w-full h-full object-cover">

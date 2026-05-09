@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Belated Birthday, Bua!</title>
+    <meta name="description" content="A celebratory birthday apology website for my lovely Bua.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Floating Balloons Container -->
+    <div id="balloon-container"></div>
+
+    <header class="hero">
+        <div class="hero-content">
+            <span class="eyebrow">Better Late Than Never...</span>
+            <h1 class="festive-title">Happy Belated Birthday, Bua! 🎉</h1>
+            <p class="hero-subtitle">Scroll down for a very official apology.</p>
+        </div>
+        <div class="scroll-indicator">↓</div>
+    </header>
+
+    <main>
+        <section id="the-apology" class="section">
+            <div class="container">
+                <h2 class="section-title">Why I’m Late 🐢</h2>
+                <div class="excuses-card">
+                    <p class="excuse-intro">Please select the most believable excuse for my 6-day delay:</p>
+                    <ul class="excuses-list">
+                        <li>
+                            <span class="emoji">🐉</span>
+                            <div class="text">A dragon stole my calendar and I had to fight to get it back.</div>
+                        </li>
+                        <li>
+                            <span class="emoji">⏳</span>
+                            <div class="text">I was stuck in a time loop where it was always yesterday.</div>
+                        </li>
+                        <li>
+                            <span class="emoji">🧠</span>
+                            <div class="text">My brain decided to buffer your birthday for 6 whole days.</div>
+                        </li>
+                        <li>
+                            <span class="emoji">👽</span>
+                            <div class="text">Aliens abducted me and erased my memory of dates.</div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="the-heart" class="section alt-bg">
+            <div class="container">
+                <h2 class="section-title">The Real Reason ❤️</h2>
+                <div class="heart-content">
+                    <p>Okay, jokes aside, I am so sorry for being 6 days late! My memory might be terrible, but my love for you is endless.</p>
+                    <p>You mean so much to me, Bua. Thank you for always being so wonderful, caring, and amazing. I hope your actual birthday was filled with as much joy and happiness as you bring to everyone around you.</p>
+                    <p class="signature">- With lots of love, your favorite (but forgetful) niece/nephew.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="photo-gallery" class="section">
+            <div class="container">
+                <h2 class="section-title">Our Favorite Memories 📸</h2>
+                <p class="gallery-subtitle">A collection of times when I actually remembered things.</p>
+                <div class="gallery-grid">
+                    <div class="gallery-item placeholder"><span class="icon">🖼️</span><p>Insert Photo Here</p></div>
+                    <div class="gallery-item placeholder"><span class="icon">🖼️</span><p>Insert Photo Here</p></div>
+                    <div class="gallery-item placeholder"><span class="icon">🖼️</span><p>Insert Photo Here</p></div>
+                    <div class="gallery-item placeholder"><span class="icon">🖼️</span><p>Insert Photo Here</p></div>
+                    <div class="gallery-item placeholder"><span class="icon">🖼️</span><p>Insert Photo Here</p></div>
+                    <div class="gallery-item placeholder"><span class="icon">🖼️</span><p>Insert Photo Here</p></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="the-gift" class="section alt-bg">
+            <div class="container">
+                <h2 class="section-title">The "Forgive Me" Gift 🎁</h2>
+                <div class="coupon-wrapper">
+                    <div class="digital-coupon" id="coupon">
+                        <div class="coupon-header">OFFICIAL I.O.U.</div>
+                        <div class="coupon-body">
+                            <h3>One Free Dinner / Treat</h3>
+                            <p>Redeemable for any restaurant or treat of your choice.</p>
+                        </div>
+                        <div class="coupon-footer">
+                            <button id="redeem-btn">Redeem Now</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Made with love (and extreme lateness) ❤️</p>
+    </footer>
+
+    <!-- Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- Custom JS -->
+    <script src="script.js"></script>
+</body>
+</html>
