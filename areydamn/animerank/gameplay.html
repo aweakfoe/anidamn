@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Anidamn - Gameplay</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="shared.js"></script>
+    <script src="data.js"></script>
+    <style>
+        body {
+            background-color: #121414;
+            color: #e3e2e2;
+        }
+        .frequency-wave {
+            mask-image: linear-gradient(to right, transparent, black, transparent);
+            opacity: 0.2;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.03), transparent);
+        }
+        .glow-button {
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        .glow-button:hover {
+            box-shadow: 0 0 35px rgba(255, 255, 255, 0.2);
+            transform: scale(1.02);
+        }
+        .cinematic-hero-bg {
+            background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), transparent);
+        }
+        @keyframes fade-in {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        .animate-fade-in {
+            animation: fade-in 0.3s ease-out forwards;
+        }
+        @keyframes cinematicReveal {
+            0% {
+                opacity: 0;
+                filter: blur(30px);
+                transform: scale(1.15) translateY(30px);
+                letter-spacing: -0.15em;
+            }
+            100% {
+                opacity: 1;
+                filter: blur(0);
+                transform: scale(1) translateY(0);
+                letter-spacing: 0.05em;
+            }
+        }
+        .animate-cinematic {
+            animation: cinematicReveal 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+        .attribute-box-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+        }
+        .attribute-box-inner.flip {
+            transform: rotateX(180deg);
+        }
+        .attribute-front, .attribute-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .attribute-back {
+            transform: rotateX(180deg);
+        }
+        .attr-container {
+            perspective: 1000px;
+            height: 90px;
+        }
+    </style>
+    
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed": "#1b1b1b",
+                        "primary-fixed": "#e3e2e2",
+                        "on-secondary": "#303031",
+                        "on-primary-fixed": "#1b1c1c",
+                        "on-background": "#e3e2e2",
+                        "tertiary-container": "#919191",
+                        "surface-variant": "#343535",
+                        "on-secondary-container": "#b6b5b5",
+                        "outline-variant": "#444748",
+                        "surface-tint": "#c7c6c6",
+                        "primary": "#c7c6c6",
+                        "on-surface-variant": "#c4c7c7",
+                        "tertiary-fixed": "#e2e2e2",
+                        "tertiary": "#c6c6c6",
+                        "on-tertiary-container": "#2a2a2a",
+                        "secondary": "#c7c6c6",
+                        "tertiary-fixed-dim": "#c6c6c6",
+                        "background": "#121414",
+                        "surface": "#121414",
+                        "surface-container-low": "#1b1c1c",
+                        "surface-dim": "#121414",
+                        "secondary-fixed-dim": "#c7c6c6",
+                        "on-tertiary-fixed-variant": "#474747",
+                        "surface-container-high": "#292a2a",
+                        "on-surface": "#e3e2e2",
+                        "surface-container": "#1f2020",
+                        "on-tertiary": "#303030",
+                        "error": "#ffb4ab",
+                        "primary-container": "#919090",
+                        "primary-fixed-dim": "#c7c6c6",
+                        "inverse-on-surface": "#303031",
+                        "on-primary": "#303031",
+                        "on-error": "#690005",
+                        "on-primary-container": "#292a2a",
+                        "on-primary-fixed-variant": "#464747",
+                        "surface-bright": "#393939",
+                        "on-secondary-fixed-variant": "#464747",
+                        "inverse-primary": "#5e5e5e",
+                        "on-secondary-fixed": "#1b1c1c",
+                        "on-error-container": "#ffdad6",
+                        "error-container": "#93000a",
+                        "surface-container-highest": "#343535",
+                        "surface-container-lowest": "#0d0e0f",
+                        "secondary-container": "#464747",
+                        "inverse-surface": "#e3e2e2",
+                        "secondary-fixed": "#e3e2e2",
+                        "outline": "#8e9192",
+                        "match-success": "#7fe27f"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "headline-xl": ["Inter"],
+                        "body-md": ["Inter"],
+                        "label-caps": ["Inter"],
+                        "display-xl": ["Inter"]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background min-h-screen relative overflow-x-hidden antialiased">
+    
+    <!-- Image Background (Full Page) -->
+    <div class="fixed top-0 left-0 w-full h-full z-[-2] pointer-events-none bg-[url('onepiece_bg.png')] bg-cover bg-center bg-no-repeat"></div>
+    <div class="fixed top-0 left-0 w-full h-full bg-black/40 z-[-1] pointer-events-none"></div>
+    
+    <!-- Frequency Wave Graphic -->
+    <div class="fixed top-[30%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-48 pointer-events-none frequency-wave flex items-center justify-center overflow-hidden z-[-1]">
+        <svg class="w-full h-full text-surface-variant opacity-40" viewBox="0 0 1000 100">
+            <path d="M0,50 Q25,0 50,50 T100,50 T150,50 T200,50 T250,50 T300,50 T350,50 T400,50 T450,50 T500,50 T550,50 T600,50 T650,50 T700,50 T750,50 T800,50 T850,50 T900,50 T950,50 T1000,50" fill="none" stroke="currentColor" stroke-width="1.5"></path>
+        </svg>
+    </div>
+
+    <header class="fixed top-0 left-0 w-full z-50 transition-all duration-300 bg-surface/80 backdrop-blur-md border-b border-white/5">
+        <div class="max-w-[1440px] mx-auto px-6 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-4 relative group">
+                <button class="p-2 rounded-full hover:bg-white/5 transition-all active:scale-95 flex items-center justify-center">
+                    <span class="material-symbols-outlined text-on-background">menu</span>
+                </button>
+                <div class="absolute top-full left-0 mt-2 w-48 bg-surface-container-high border border-white/10 rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 flex flex-col overflow-hidden">
+                    <a href="index.html" class="px-4 py-3 hover:bg-white/5 text-on-surface font-body-sm flex items-center gap-2">
+                        <span class="material-symbols-outlined text-sm">home</span>
+                        Home Page
+                    </a>
+                    <a href="#" class="px-4 py-3 hover:bg-white/5 text-on-surface font-body-sm flex items-center gap-2 border-t border-white/5">
+                        <span class="material-symbols-outlined text-sm">feedback</span>
+                        Feedback Form
+                    </a>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-6">
+                <!-- Modes Toggle -->
+                <div class="flex items-center bg-surface-variant p-1 rounded-full border border-white/10">
+                    <button id="daily-mode-btn" class="px-4 py-1.5 rounded-full font-label-caps text-xs transition-colors bg-white/10 text-on-surface">Daily</button>
+                    <button id="unlimited-mode-btn" class="px-4 py-1.5 rounded-full font-label-caps text-xs transition-colors text-outline hover:text-on-surface">Unlimited</button>
+                </div>
+                
+                <div class="flex items-center gap-2 px-3 py-1 bg-surface-container rounded-full border border-white/10">
+                    <span class="text-lg">🔥</span>
+                    <span id="streak-counter" class="font-space-grotesk font-bold text-sm">0</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="relative z-10 w-full max-w-[960px] mx-auto px-4 pt-32 pb-32 min-h-screen flex flex-col items-center text-center">
+        
+        <!-- Yesterday's Target Banner -->
+        <div id="yesterday-banner" class="hidden w-full max-w-2xl bg-surface-variant/80 border border-red-900/50 rounded-xl p-4 mb-8 flex-col items-center gap-2 animate-fade-in shadow-[0_0_15px_rgba(153,27,27,0.3)]">
+            <span class="font-label-caps text-xs text-outline">Yesterday's Target</span>
+            <div class="flex items-center gap-4">
+                <img id="yesterday-img" src="" class="w-10 h-10 rounded-full object-cover">
+                <span id="yesterday-title" class="font-headline-md text-lg text-on-surface"></span>
+            </div>
+        </div>
+
+        <div class="w-full max-w-2xl text-center mb-12 flex flex-col items-center gap-4 animate-cinematic">
+            <h2 class="text-[50px] md:text-[80px] font-black leading-tight tracking-[0.05em] text-transparent relative z-10" style="-webkit-text-stroke: 2px rgba(255,255,255,0.9); text-shadow: 0 0 40px rgba(255,255,255,0.3);">
+                GUESS THE ANIME
+            </h2>
+            <p class="font-body-lg text-on-surface opacity-90 drop-shadow-md">Type an anime title below. You have 10 tries to reveal the target based on 6 attributes.</p>
+        </div>
+
+        <!-- Search input container -->
+        <div class="w-full max-w-2xl relative mb-12">
+            <div class="relative group">
+                <input id="search-input" type="text" placeholder="Search for an anime..." class="w-full bg-surface-container-high/50 border border-outline-variant/50 focus:border-tertiary-fixed focus:ring-1 focus:ring-tertiary-fixed rounded-none p-6 pl-14 text-lg font-body-lg text-on-surface placeholder:text-outline transition-all glass-input">
+                <span class="material-symbols-outlined absolute left-5 top-1/2 -translate-y-1/2 text-outline group-focus-within:text-tertiary-fixed transition-colors">search</span>
+            </div>
+            
+            <div id="search-results" class="absolute top-full left-0 w-full mt-2 bg-surface-container-high border border-outline-variant/30 shadow-2xl rounded-xl overflow-hidden hidden z-50 flex flex-col max-h-[300px] overflow-y-auto">
+                <!-- Results dynamically populated here -->
+            </div>
+        </div>
+
+        <div id="game-over-container" class="hidden w-full max-w-2xl mb-8 flex-col items-center justify-center p-8 glass-card rounded-2xl animate-fade-in text-center">
+            <h3 id="game-over-title" class="font-display-xl text-4xl mb-4 text-on-surface"></h3>
+            <p id="game-over-desc" class="font-body-lg text-outline mb-6"></p>
+            <div class="flex items-center gap-4">
+                <img id="target-reveal-img" src="" class="w-20 h-20 rounded-full object-cover shadow-lg border border-white/10">
+                <div class="text-left">
+                    <h4 id="target-reveal-name" class="font-headline-lg text-2xl text-on-surface"></h4>
+                </div>
+            </div>
+            <button id="play-again-btn" class="mt-8 px-8 py-3 glow-button glass-card text-on-surface rounded-full font-label-caps uppercase tracking-widest hover:bg-white/10 transition-colors hidden font-semibold border border-white/20">Play Again</button>
+        </div>
+
+        <!-- Guesses Container -->
+        <div id="guesses-container" class="w-full flex flex-col gap-8">
+            <!-- Dynamically populated -->
+        </div>
+
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
