@@ -1,758 +1,1333 @@
-<!DOCTYPE html><html class="dark" lang="en"><head>
-<meta charset="utf-8">
-<meta content="width=device-width, initial-scale=1.0" name="viewport">
-<title>Anidamn - Anime Guessing Game</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
-<script id="tailwind-config">
-  tailwind.config = {
-    darkMode: "class",
-    theme: {
-      extend: {
-        "colors": {
-                "on-tertiary-fixed": "#1b1b1b",
-                "primary-fixed": "#e3e2e2",
-                "on-secondary": "#303031",
-                "on-primary-fixed": "#1b1c1c",
-                "on-background": "#e3e2e2",
-                "tertiary-container": "#919191",
-                "surface-variant": "#343535",
-                "on-secondary-container": "#b6b5b5",
-                "outline-variant": "#444748",
-                "surface-tint": "#c7c6c6",
-                "primary": "#c7c6c6",
-                "on-surface-variant": "#c4c7c7",
-                "tertiary-fixed": "#e2e2e2",
-                "tertiary": "#c6c6c6",
-                "on-tertiary-container": "#2a2a2a",
-                "secondary": "#c7c6c6",
-                "tertiary-fixed-dim": "#c6c6c6",
-                "background": "#121414",
-                "surface": "#121414",
-                "surface-container-low": "#1b1c1c",
-                "surface-dim": "#121414",
-                "secondary-fixed-dim": "#c7c6c6",
-                "on-tertiary-fixed-variant": "#474747",
-                "surface-container-high": "#292a2a",
-                "on-surface": "#e3e2e2",
-                "surface-container": "#1f2020",
-                "on-tertiary": "#303030",
-                "error": "#ffb4ab",
-                "primary-container": "#919090",
-                "primary-fixed-dim": "#c7c6c6",
-                "inverse-on-surface": "#303031",
-                "on-primary": "#303031",
-                "on-error": "#690005",
-                "on-primary-container": "#292a2a",
-                "on-primary-fixed-variant": "#464747",
-                "surface-bright": "#393939",
-                "on-secondary-fixed-variant": "#464747",
-                "inverse-primary": "#5e5e5e",
-                "on-secondary-fixed": "#1b1c1c",
-                "on-error-container": "#ffdad6",
-                "error-container": "#93000a",
-                "surface-container-highest": "#343535",
-                "surface-container-lowest": "#0d0e0f",
-                "secondary-container": "#464747",
-                "inverse-surface": "#e3e2e2",
-                "secondary-fixed": "#e3e2e2",
-                "outline": "#8e9192",
-                "match-success": "#7fe27f"
-        },
-        "borderRadius": {
-                "DEFAULT": "0.25rem",
-                "lg": "0.5rem",
-                "xl": "0.75rem",
-                "full": "9999px"
-        },
-        "spacing": {
-                "md": "16px",
-                "xs": "4px",
-                "unit": "4px",
-                "xl": "32px",
-                "gutter": "16px",
-                "lg": "24px",
-                "xxl": "48px",
-                "sm": "8px",
-                "margin": "24px"
-        },
-        "fontFamily": {
-                "body-lg": [
-                        "Inter"
-                ],
-                "headline-lg": [
-                        "Inter"
-                ],
-                "body-sm": [
-                        "Inter"
-                ],
-                "label-md": [
-                        "Inter"
-                ],
-                "headline-md": [
-                        "Inter"
-                ],
-                "label-sm": [
-                        "Inter"
-                ],
-                "headline-xl": [
-                        "Inter"
-                ],
-                "body-md": [
-                        "Inter"
-                ]
-        },
-        "fontSize": {
-                "body-lg": [
-                        "18px",
-                        {
-                                "lineHeight": "1.6",
-                                "fontWeight": "400"
-                        }
-                ],
-                "headline-lg": [
-                        "32px",
-                        {
-                                "lineHeight": "1.2",
-                                "letterSpacing": "-0.01em",
-                                "fontWeight": "700"
-                        }
-                ],
-                "body-sm": [
-                        "14px",
-                        {
-                                "lineHeight": "1.5",
-                                "fontWeight": "400"
-                        }
-                ],
-                "label-md": [
-                        "14px",
-                        {
-                                "lineHeight": "1",
-                                "letterSpacing": "0.05em",
-                                "fontWeight": "600"
-                        }
-                ],
-                "headline-md": [
-                        "24px",
-                        {
-                                "lineHeight": "1.3",
-                                "fontWeight": "600"
-                        }
-                ],
-                "label-sm": [
-                        "12px",
-                        {
-                                "lineHeight": "1",
-                                "letterSpacing": "0.02em",
-                                "fontWeight": "500"
-                        }
-                ],
-                "headline-xl": [
-                        "40px",
-                        {
-                                "lineHeight": "1.2",
-                                "letterSpacing": "-0.02em",
-                                "fontWeight": "700"
-                        }
-                ],
-                "body-md": [
-                        "16px",
-                        {
-                                "lineHeight": "1.6",
-                                "fontWeight": "400"
-                        }
-                ],
-                "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "700"}]
-        }
-},
-    },
-  }
-</script>
-<style>body {
-    background-color: transparent;
-    background-image: radial-gradient(circle at 10% 10%, rgba(255, 255, 255, 0.05) 0%, transparent 40%), radial-gradient(circle at 90% 90%, rgba(255, 255, 255, 0.05) 0%, transparent 40%);
-    min-height: 100vh;
-    color: #e3e2e2
+<!DOCTYPE html>
+<html class="dark" lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>ANIDAMN — Anime Guessing Game</title>
+  <meta name="description"
+    content="Test your anime knowledge! 10 guesses, 250+ anime. The ultimate daily anime guessing game.">
+  <link rel="stylesheet" href="output.css">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700;800;900&family=Press+Start+2P&family=Space+Grotesk:wght@300;400;500;600;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --accent: #f5c518;
+      --accent-glow: rgba(245, 197, 24, 0.3);
+      --accent2: #e05c5c;
+      --glass-bg: rgba(10, 10, 15, 0.55);
+      --glass-border: rgba(255, 255, 255, 0.07);
     }
-.frequency-wave {
-    mask-image: linear-gradient(to right, transparent, black, transparent);
-    opacity: 0.2
+
+    * {
+      box-sizing: border-box;
     }
-.glass-card {
-    background: rgba(255, 255, 255, 0.02);
-    backdrop-filter: blur(24px);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.03), transparent)
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: #080810;
+      color: #e8e8f0;
+      overflow-x: hidden;
+      cursor: url('enma.cur'), auto;
     }
-.glow-button {
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
-    transition: all 0.3s ease
+
+    /* Video Background */
+    .video-bg {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      pointer-events: none;
     }
-.glow-button:hover {
-    box-shadow: 0 0 35px rgba(255, 255, 255, 0.2);
-    transform: scale(1.02)
+
+    .video-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background: linear-gradient(to bottom,
+          rgba(8, 8, 16, 0.6) 0%,
+          rgba(8, 8, 16, 0.3) 40%,
+          rgba(8, 8, 16, 0.7) 80%,
+          rgba(8, 8, 16, 0.95) 100%);
+      pointer-events: none;
     }
-.neon-filament {
-    box-shadow: 0 0 8px rgba(255, 255, 255, 0.4)
+
+    /* Nav */
+    .nav-glass {
+      background: rgba(8, 8, 16, 0.5);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--glass-border);
     }
-.cinematic-hero-bg {
-    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), transparent);
-}
-.custom-scrollbar::-webkit-scrollbar {
-    width: 6px;
-}
-.custom-scrollbar::-webkit-scrollbar-track {
-    background: transparent;
-}
-.custom-scrollbar::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
-}
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.2);
-}
-@keyframes popUp {
-    0% { opacity: 0; transform: scale(0.95) translateY(20px); }
-    100% { opacity: 1; transform: scale(1) translateY(0); }
-}
-.animate-pop-up {
-    animation: popUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-@keyframes fade-in {
-    0% { opacity: 0; }
-    100% { opacity: 1; }
-}
-.animate-fade-in {
-    animation: fade-in 0.3s ease-out forwards;
-}
-@keyframes cinematicReveal {
-    0% {
+
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      letter-spacing: 0.1em;
+      background: linear-gradient(135deg, #ffffff, var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-decoration: none;
+    }
+
+    .nav-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: 100px;
+      border: 1px solid var(--glass-border);
+      background: rgba(255, 255, 255, 0.04);
+      color: #c8c8d8;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    .nav-btn:hover {
+      background: rgba(255, 255, 255, 0.09);
+      border-color: rgba(255, 255, 255, 0.15);
+      color: #fff;
+    }
+
+    .nav-btn-accent {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #0a0a0f;
+      font-weight: 700;
+    }
+
+    .nav-btn-accent:hover {
+      background: #ffd44a;
+      border-color: #ffd44a;
+      color: #0a0a0f;
+      box-shadow: 0 0 24px var(--accent-glow);
+    }
+
+    /* Hero */
+    .hero-section {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 100px 24px 60px;
+      position: relative;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      border-radius: 100px;
+      border: 1px solid rgba(245, 197, 24, 0.3);
+      background: rgba(245, 197, 24, 0.08);
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 32px;
+      animation: fadeSlideDown 0.8s ease both;
+    }
+
+    .hero-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(80px, 18vw, 180px);
+      line-height: 0.9;
+      letter-spacing: 0.05em;
+      background: linear-gradient(180deg, #ffffff 0%, rgba(255, 255, 255, 0.7) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 60px rgba(255, 255, 255, 0.15));
+      animation: heroReveal 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+      margin-bottom: 8px;
+    }
+
+    .hero-subtitle {
+      font-size: clamp(16px, 2.5vw, 20px);
+      color: rgba(255, 255, 255, 0.6);
+      font-weight: 400;
+      max-width: 400px;
+      margin: 16px auto 48px;
+      line-height: 1.6;
+      animation: fadeSlideUp 0.8s ease 0.6s both;
+    }
+
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 18px 48px;
+      border-radius: 100px;
+      background: var(--accent);
+      color: #0a0a0f;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 0 40px var(--accent-glow), 0 4px 20px rgba(0, 0, 0, 0.4);
+      animation: fadeSlideUp 0.8s ease 0.8s both;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-cta::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .hero-cta:hover {
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 0 60px rgba(245, 197, 24, 0.5), 0 8px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .hero-cta:hover::before {
+      opacity: 1;
+    }
+
+    .hero-cta:active {
+      transform: scale(0.98);
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 48px;
+      margin-top: 64px;
+      animation: fadeSlideUp 0.8s ease 1s both;
+    }
+
+    .hero-stat {
+      text-align: center;
+    }
+
+    .hero-stat-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 42px;
+      color: var(--accent);
+      line-height: 1;
+    }
+
+    .hero-stat-label {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.4);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+
+    /* Scroll indicator */
+    .scroll-indicator {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: rgba(255, 255, 255, 0.3);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      animation: scrollBounce 2s ease infinite;
+    }
+
+    /* Yesterday banner */
+    .yesterday-strip {
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+      margin-bottom: 40px;
+    }
+
+    .yesterday-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 24px;
+      border-radius: 100px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(12px);
+      font-size: 14px;
+    }
+
+    .yesterday-pill span.label {
+      color: rgba(255, 255, 255, 0.4);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .yesterday-pill span.value {
+      color: #fff;
+      font-weight: 600;
+    }
+
+    .yesterday-pill .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 8px var(--accent);
+    }
+
+    /* Content sections */
+    .content-wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px 120px;
+    }
+
+    .section-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.35);
+      margin-bottom: 20px;
+    }
+
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, rgba(255, 255, 255, 0.08), transparent);
+    }
+
+    .section-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 24px;
+    }
+
+    /* Glass cards */
+    .glass-panel {
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .glass-panel::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    /* Fact items */
+    .fact-item {
+      display: flex;
+      gap: 16px;
+      padding: 16px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      transition: all 0.2s;
+    }
+
+    .fact-item:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.08);
+      transform: translateX(4px);
+    }
+
+    .fact-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 32px;
+      color: rgba(245, 197, 24, 0.3);
+      line-height: 1;
+      min-width: 40px;
+    }
+
+    .fact-text {
+      font-size: 14px;
+      line-height: 1.65;
+      color: rgba(255, 255, 255, 0.7);
+      padding-top: 4px;
+    }
+
+    .fact-text strong {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    /* Quiz */
+    .quiz-option {
+      width: 100%;
+      text-align: left;
+      padding: 14px 18px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 14px;
+      font-family: 'Outfit', sans-serif;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .quiz-option:hover:not(:disabled) {
+      background: rgba(255, 255, 255, 0.09);
+      border-color: rgba(255, 255, 255, 0.15);
+      color: #fff;
+      transform: translateY(-1px);
+    }
+
+    /* Dropdown menu */
+    .dropdown-menu {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 0;
+      width: 200px;
+      background: rgba(12, 12, 20, 0.95);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: 14px;
+      overflow: hidden;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-8px);
+      transition: all 0.2s;
+      z-index: 100;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    }
+
+    .dropdown-trigger:hover .dropdown-menu,
+    .dropdown-trigger:focus-within .dropdown-menu {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .dropdown-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 14px;
+      text-decoration: none;
+      transition: all 0.15s;
+      cursor: pointer;
+      border: none;
+      background: none;
+      width: 100%;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    .dropdown-item:hover {
+      background: rgba(255, 255, 255, 0.06);
+      color: #fff;
+    }
+
+    .dropdown-item+.dropdown-item {
+      border-top: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    /* Modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(8px);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s;
+    }
+
+    .modal-backdrop.open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal-card {
+      background: rgba(14, 14, 22, 0.97);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 24px;
+      padding: 40px;
+      max-width: 420px;
+      width: 100%;
+      position: relative;
+      transform: scale(0.95) translateY(20px);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .modal-backdrop.open .modal-card {
+      transform: scale(1) translateY(0);
+    }
+
+    .modal-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 28px;
+      text-align: center;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: rgba(255, 255, 255, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .modal-close:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: #fff;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.4);
+      margin-bottom: 8px;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 12px 16px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      color: #fff;
+      font-size: 15px;
+      font-family: 'Outfit', sans-serif;
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    .form-input:focus {
+      border-color: var(--accent);
+      background: rgba(245, 197, 24, 0.04);
+      box-shadow: 0 0 0 3px rgba(245, 197, 24, 0.08);
+    }
+
+    .form-btn {
+      width: 100%;
+      padding: 14px;
+      background: var(--accent);
+      border: none;
+      border-radius: 10px;
+      color: #0a0a0f;
+      font-size: 15px;
+      font-weight: 700;
+      font-family: 'Space Grotesk', sans-serif;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 8px;
+    }
+
+    .form-btn:hover {
+      background: #ffd44a;
+      box-shadow: 0 0 24px var(--accent-glow);
+    }
+
+    /* Stats */
+    .stat-big {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 56px;
+      line-height: 1;
+      color: var(--accent);
+    }
+
+    /* Bottom nav */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(8, 8, 16, 0.9);
+      backdrop-filter: blur(20px);
+      border-top: 1px solid var(--glass-border);
+      display: flex;
+      justify-content: space-around;
+      padding: 12px 0 16px;
+      z-index: 100;
+    }
+
+    .bottom-nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 8px 16px;
+      border-radius: 12px;
+      color: rgba(255, 255, 255, 0.4);
+      text-decoration: none;
+      font-size: 11px;
+      font-weight: 500;
+      transition: all 0.2s;
+      cursor: pointer;
+      background: none;
+      border: none;
+    }
+
+    .bottom-nav-item.active,
+    .bottom-nav-item:hover {
+      color: var(--accent);
+      background: rgba(245, 197, 24, 0.08);
+    }
+
+    /* Animations */
+    @keyframes fadeSlideDown {
+      from {
         opacity: 0;
-        filter: blur(30px);
-        transform: scale(1.15) translateY(30px);
-        letter-spacing: -0.15em;
-    }
-    100% {
+        transform: translateY(-16px);
+      }
+
+      to {
         opacity: 1;
-        filter: blur(0);
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeSlideUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes heroReveal {
+      0% {
+        opacity: 0;
+        filter: blur(40px) drop-shadow(0 0 0px white);
+        transform: scale(1.1);
+      }
+
+      100% {
+        opacity: 1;
+        filter: blur(0) drop-shadow(0 0 60px rgba(255, 255, 255, 0.15));
+        transform: scale(1);
+      }
+    }
+
+    @keyframes scrollBounce {
+
+      0%,
+      100% {
+        transform: translateX(-50%) translateY(0);
+        opacity: 0.3;
+      }
+
+      50% {
+        transform: translateX(-50%) translateY(8px);
+        opacity: 0.7;
+      }
+    }
+
+    @keyframes popUp {
+      from {
+        opacity: 0;
+        transform: scale(0.9) translateY(20px);
+      }
+
+      to {
+        opacity: 1;
         transform: scale(1) translateY(0);
-        letter-spacing: 0.05em;
+      }
     }
-}
-.animate-cinematic {
-    animation: cinematicReveal 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-}
-@keyframes hatDrop {
-    0% {
-        transform: translateY(-800px) rotate(-45deg);
-        opacity: 0;
+
+    @keyframes pulse-ring {
+      0% {
+        box-shadow: 0 0 0 0 var(--accent-glow);
+      }
+
+      70% {
+        box-shadow: 0 0 0 16px transparent;
+      }
+
+      100% {
+        box-shadow: 0 0 0 0 transparent;
+      }
     }
-    10% {
-        opacity: 1;
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 5px;
     }
-    60% {
-        transform: translateY(30px) rotate(15deg);
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
     }
-    80% {
-        transform: translateY(-15px) rotate(-5deg);
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 99px;
     }
-    100% {
-        transform: translateY(0) rotate(8deg);
-        opacity: 1;
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.2);
     }
-}
-.animate-hat-drop {
-    animation: hatDrop 1.2s cubic-bezier(0.28, 0.84, 0.42, 1) 2s forwards;
-    opacity: 0;
-}
-</style>
+
+    /* Grid divider */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    @media (max-width: 768px) {
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .hero-title { font-family: 'Press Start 2P', cursive !important; font-size: clamp(30px, 8vw, 80px) !important; letter-spacing: 2px !important; }
+    .hero-subtitle { font-family: 'Press Start 2P', cursive !important; font-size: 10px !important; letter-spacing: 1px !important; line-height: 1.8 !important; }
+    .btn-primary { font-family: 'Press Start 2P', cursive !important; font-size: 12px !important; letter-spacing: 2px; }
+    .btn-secondary { font-family: 'Press Start 2P', cursive !important; font-size: 10px !important; letter-spacing: 2px; }
+    .logo-text { font-family: 'Press Start 2P', cursive !important; font-size: 16px !important; letter-spacing: 2px !important; }
+    .hero-badge { font-family: 'Press Start 2P', cursive !important; font-size: 8px !important; letter-spacing: 1px; }
+  </style>
 </head>
-<body class="font-body-md overflow-x-hidden">
-<!-- Video Background (Full Page) -->
-<video autoplay loop muted playsinline class="fixed top-0 left-0 w-full h-full object-cover z-[-1] pointer-events-none">
+
+<body>
+
+  <!-- Video Background -->
+  <video autoplay loop muted playsinline class="video-bg">
     <source src="erenvideo.mp4" type="video/mp4">
-</video>
-<div class="fixed top-0 left-0 w-full h-full bg-black/40 z-[-1] pointer-events-none"></div>
+  </video>
+  <div class="video-overlay"></div>
 
-<!-- Top Navigation -->
-<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-lg py-md max-w-[1200px] left-1/2 -translate-x-1/2 bg-surface/40 backdrop-blur-md">
-<div class="relative group">
-    <button class="p-2 rounded-full hover:bg-white/5 transition-all active:scale-95 flex items-center justify-center">
-        <span class="material-symbols-outlined text-on-background">menu</span>
-    </button>
-    <div class="absolute top-full left-0 mt-2 w-48 bg-surface-container-high border border-white/10 rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 flex flex-col overflow-hidden">
-        <a href="index.html" class="px-4 py-3 hover:bg-white/5 text-on-surface font-body-sm flex items-center gap-2">
-            <span class="material-symbols-outlined text-sm">home</span>
-            Home Page
-        </a>
-        <a href="#" class="px-4 py-3 hover:bg-white/5 text-on-surface font-body-sm flex items-center gap-2 border-t border-white/5">
-            <span class="material-symbols-outlined text-sm">feedback</span>
-            Feedback Form
-        </a>
-    </div>
-</div>
-<div class="flex items-center gap-md">
-<div class="flex items-center gap-xs">
-<button id="stats-btn" class="p-2 rounded-full hover:bg-white/5 transition-all active:scale-95" title="Statistics">
-<span class="material-symbols-outlined text-on-background">bar_chart</span>
-</button>
-<button id="login-btn" class="p-2 rounded-full hover:bg-white/5 transition-all active:scale-95 flex items-center gap-2" title="Register / Sign Up">
-<span id="user-icon" class="material-symbols-outlined text-on-background">person</span>
-<span id="user-name" class="hidden font-label-md text-on-surface"></span>
-</button>
-</div>
-</div>
-</header>
-<main class="relative">
-<!-- Hero Section with Background -->
-<section class="cinematic-hero-bg w-full pt-48 pb-24 px-lg flex flex-col items-center text-center relative overflow-hidden">
-<!-- Frequency Wave Graphic -->
-<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-48 pointer-events-none frequency-wave flex items-center justify-center overflow-hidden z-10">
-<svg class="w-full h-full text-surface-variant opacity-40" viewBox="0 0 1000 100">
-<path d="M0,50 Q25,0 50,50 T100,50 T150,50 T200,50 T250,50 T300,50 T350,50 T400,50 T450,50 T500,50 T550,50 T600,50 T650,50 T700,50 T750,50 T800,50 T850,50 T900,50 T950,50 T1000,50" fill="none" stroke="currentColor" stroke-width="1.5"></path>
-</svg>
-</div>
-<h1 class="text-[80px] md:text-[140px] font-black leading-tight tracking-[0.05em] text-transparent relative z-10 animate-cinematic" style="-webkit-text-stroke: 3px rgba(255,255,255,0.9); text-shadow: 0 0 40px rgba(255,255,255,0.3);">
-                <span class="relative inline-block">
-                    A
-                    <div class="absolute top-[-15%] left-[-25%] w-[150%] h-auto z-20 animate-hat-drop pointer-events-none origin-center drop-shadow-2xl">
-                        <svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg" class="w-full h-full">
-                            <ellipse cx="100" cy="90" rx="90" ry="25" fill="#eab308" stroke="#a16207" stroke-width="3"/>
-                            <path d="M 45 85 C 45 10, 155 10, 155 85 Z" fill="#eab308" stroke="#a16207" stroke-width="3"/>
-                            <path d="M 47 75 Q 100 95 153 75 L 154 85 Q 100 105 46 85 Z" fill="#ef4444" stroke="#991b1b" stroke-width="2"/>
-                        </svg>
-                    </div>
-                </span>NIDAMN
-            </h1>
-<p class="font-body-lg text-on-surface mt-xs mb-lg max-w-lg opacity-90 drop-shadow-md">
-                10 guesses, 250+ anime. <br> Will you win today?
-            </p>
-<a href="gameplay.html" class="glow-button glass-card hover:bg-white/5 text-on-surface font-headline-md px-xl py-md rounded-full flex items-center gap-sm relative z-10 border border-white/20">
-<span class="material-symbols-outlined" data-weight="fill">play_arrow</span>
-                PLAY
+  <!-- Navigation -->
+  <header class="nav-glass fixed top-0 left-0 right-0 z-50">
+    <div
+      style="max-width:1100px; margin:0 auto; padding:0 24px; height:64px; display:flex; align-items:center; justify-content:space-between;">
+
+      <div style="display:flex; align-items:center; gap:16px;">
+        <!-- Hamburger Menu -->
+        <div class="dropdown-trigger" style="position:relative;">
+          <button class="nav-btn" style="padding:8px; gap:0; border-radius:10px;">
+            <span class="material-symbols-outlined" style="font-size:20px;">menu</span>
+          </button>
+          <div class="dropdown-menu">
+            <a href="index.html" class="dropdown-item">
+              <span class="material-symbols-outlined" style="font-size:18px;">home</span>
+              Home
             </a>
-</section>
-<!-- Content Container -->
-<div class="pb-40 px-lg flex flex-col items-center max-w-6xl mx-auto text-center -mt-12 relative z-20">
-<!-- Yesterday's Section -->
-<section class="mb-20">
-<div class="glass-card flex items-center gap-sm px-6 py-3 rounded-full group cursor-pointer hover:border-white/10 transition-all">
-<span class="material-symbols-outlined text-on-surface group-hover:rotate-45 transition-transform duration-500">album</span>
-<span class="font-label-sm uppercase tracking-[0.2em] text-outline">Yesterday's Reveal</span>
-<div class="h-4 w-[1px] bg-white/10 mx-2"></div>
-<span id="landing-yesterday" class="text-on-surface font-semibold group-hover:text-primary transition-colors">Loading...</span>
-</div>
-</section>
-<div class="w-full grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch text-left">
-<!-- Anime Facts Section -->
-<section class="w-full h-full flex flex-col">
-<div class="glass-card rounded-2xl p-lg overflow-hidden relative flex-1 flex flex-col">
-<div class="flex justify-between items-center mb-md">
-<div class="flex items-center gap-xs bg-primary-container/20 text-primary px-3 py-1 rounded-full border border-primary/20">
-<span class="material-symbols-outlined text-sm">lightbulb</span>
-<span class="font-label-sm uppercase">Did you know?</span>
-</div>
-<div class="font-headline-md text-on-surface">10 Interesting Anime Facts</div>
-</div>
+            <a href="#" id="feedback-btn" class="dropdown-item">
+              <span class="material-symbols-outlined" style="font-size:18px;">rate_review</span>
+              Feedback
+            </a>
+          </div>
+        </div>
+        <span class="nav-logo">ANIDAMN</span>
+      </div>
 
-<div class="flex flex-col gap-4 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
-    <!-- Fact 1 -->
-    <div class="bg-surface-variant/30 border border-white/5 p-4 rounded-xl hover:bg-surface-variant/50 transition-colors">
-        <div class="flex items-start gap-4">
-            <div class="font-display-xl text-3xl text-outline-variant opacity-50 select-none">01</div>
-            <p class="font-body-md text-on-surface leading-relaxed"><strong class="text-primary">Spirited Away</strong> is the only anime film in history to win an Academy Award (Best Animated Feature in 2003).</p>
-        </div>
-    </div>
-    <!-- Fact 2 -->
-    <div class="bg-surface-variant/30 border border-white/5 p-4 rounded-xl hover:bg-surface-variant/50 transition-colors">
-        <div class="flex items-start gap-4">
-            <div class="font-display-xl text-3xl text-outline-variant opacity-50 select-none">02</div>
-            <p class="font-body-md text-on-surface leading-relaxed">The highest-grossing anime film of all time is <strong class="text-primary">Demon Slayer: Mugen Train</strong>, earning over $500 million worldwide.</p>
-        </div>
-    </div>
-    <!-- Fact 3 -->
-    <div class="bg-surface-variant/30 border border-white/5 p-4 rounded-xl hover:bg-surface-variant/50 transition-colors">
-        <div class="flex items-start gap-4">
-            <div class="font-display-xl text-3xl text-outline-variant opacity-50 select-none">03</div>
-            <p class="font-body-md text-on-surface leading-relaxed">Over <strong class="text-primary">60%</strong> of the world's animation-based entertainment is anime.</p>
-        </div>
-    </div>
-    <!-- Fact 4 -->
-    <div class="bg-surface-variant/30 border border-white/5 p-4 rounded-xl hover:bg-surface-variant/50 transition-colors">
-        <div class="flex items-start gap-4">
-            <div class="font-display-xl text-3xl text-outline-variant opacity-50 select-none">04</div>
-            <p class="font-body-md text-on-surface leading-relaxed"><strong class="text-primary">Sazae-san</strong> is the longest-running animated TV series in the world, with over 7,500 episodes since 1969.</p>
-        </div>
-    </div>
-    <!-- Fact 5 -->
-    <div class="bg-surface-variant/30 border border-white/5 p-4 rounded-xl hover:bg-surface-variant/50 transition-colors">
-        <div class="flex items-start gap-4">
-            <div class="font-display-xl text-3xl text-outline-variant opacity-50 select-none">05</div>
-            <p class="font-body-md text-on-surface leading-relaxed">The name <strong class="text-primary">Studio Ghibli</strong> comes from the Arabic word for "Mediterranean wind".</p>
-        </div>
-    </div>
-    <!-- Fact 6 -->
-    <div class="bg-surface-variant/30 border border-white/5 p-4 rounded-xl hover:bg-surface-variant/50 transition-colors">
-        <div class="flex items-start gap-4">
-            <div class="font-display-xl text-3xl text-outline-variant opacity-50 select-none">06</div>
-            <p class="font-body-md text-on-surface leading-relaxed">The titans in <strong class="text-primary">Attack on Titan</strong> are based on a drunk person the creator, Hajime Isayama, encountered in an internet cafe.</p>
-        </div>
-    </div>
-    <!-- Fact 7 -->
-    <div class="bg-surface-variant/30 border border-white/5 p-4 rounded-xl hover:bg-surface-variant/50 transition-colors">
-        <div class="flex items-start gap-4">
-            <div class="font-display-xl text-3xl text-outline-variant opacity-50 select-none">07</div>
-            <p class="font-body-md text-on-surface leading-relaxed"><strong class="text-primary">One Piece</strong> holds the Guinness World Record for the most copies published for the same comic book series by a single author.</p>
-        </div>
-    </div>
-    <!-- Fact 8 -->
-    <div class="bg-surface-variant/30 border border-white/5 p-4 rounded-xl hover:bg-surface-variant/50 transition-colors">
-        <div class="flex items-start gap-4">
-            <div class="font-display-xl text-3xl text-outline-variant opacity-50 select-none">08</div>
-            <p class="font-body-md text-on-surface leading-relaxed">The first anime to be broadcast in the United States was <strong class="text-primary">Astro Boy</strong> in 1963.</p>
-        </div>
-    </div>
-    <!-- Fact 9 -->
-    <div class="bg-surface-variant/30 border border-white/5 p-4 rounded-xl hover:bg-surface-variant/50 transition-colors">
-        <div class="flex items-start gap-4">
-            <div class="font-display-xl text-3xl text-outline-variant opacity-50 select-none">09</div>
-            <p class="font-body-md text-on-surface leading-relaxed"><strong class="text-primary">Death Note</strong> was briefly banned in parts of China because students were buying notebooks and writing their teachers' names in them.</p>
-        </div>
-    </div>
-    <!-- Fact 10 -->
-    <div class="bg-surface-variant/30 border border-white/5 p-4 rounded-xl hover:bg-surface-variant/50 transition-colors">
-        <div class="flex items-start gap-4">
-            <div class="font-display-xl text-3xl text-outline-variant opacity-50 select-none">10</div>
-            <p class="font-body-md text-on-surface leading-relaxed">The massive Pizza Hut product placements in <strong class="text-primary">Code Geass</strong> were part of a real-life marketing deal in Japan.</p>
-        </div>
-    </div>
-</div>
-
-</div>
-</section>
-
-<!-- Anime Quiz Section -->
-<section class="w-full h-full flex flex-col">
-<div class="glass-card rounded-2xl p-lg overflow-hidden relative text-left flex-1 flex flex-col">
-    <div class="flex justify-between items-center mb-md">
-        <div class="flex items-center gap-xs bg-tertiary-container/20 text-tertiary px-3 py-1 rounded-full border border-tertiary/20">
-            <span class="material-symbols-outlined text-sm">help</span>
-            <span class="font-label-sm uppercase">Mini Quiz</span>
-        </div>
-        <div class="font-headline-md text-on-surface">Anime Trivia</div>
-    </div>
-    <div id="quiz-container" class="bg-surface-variant/30 border border-white/5 p-6 rounded-xl relative min-h-[200px] flex flex-col justify-center transition-all duration-300">
-        <h3 id="quiz-question" class="font-headline-md text-xl text-on-surface mb-6 text-center">Loading Question...</h3>
-        <div id="quiz-options" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <!-- Options populated here -->
-        </div>
-        <div id="quiz-feedback" class="hidden mt-6 text-center font-label-md py-2 rounded-lg"></div>
-        <button id="quiz-next-btn" class="hidden mt-4 mx-auto bg-primary text-on-primary font-label-md px-6 py-2 rounded-full hover:opacity-90 transition-opacity">Next Question</button>
-    </div>
-</div>
-</div>
-</section>
-</div>
-
-</div>
-</main>
-<!-- Bottom Navigation (Mobile Only) -->
-<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-safe h-20 bg-surface-container-low/80 backdrop-blur-xl border-t border-white/5 shadow-2xl rounded-t-xl">
-<a class="flex flex-col items-center justify-center bg-surface-variant/50 text-on-surface rounded-xl px-4 py-2 active:scale-110 duration-200" href="#">
-<span class="material-symbols-outlined" style="font-variation-settings: &quot;FILL&quot; 1;">videogame_asset</span>
-<span class="font-label-sm">Game</span>
-</a>
-<a class="flex flex-col items-center justify-center text-outline p-2 hover:text-on-surface transition-all" href="#">
-<span class="material-symbols-outlined">bar_chart</span>
-<span class="font-label-sm">Stats</span>
-</a>
-<a class="flex flex-col items-center justify-center text-outline p-2 hover:text-on-surface transition-all" href="#">
-<span class="material-symbols-outlined">emoji_events</span>
-<span class="font-label-sm">Ranks</span>
-</a>
-<a class="flex flex-col items-center justify-center text-outline p-2 hover:text-on-surface transition-all" href="#">
-<span class="material-symbols-outlined">info</span>
-<span class="font-label-sm">About</span>
-</a>
-</nav>
-<!-- Background Decorative Blurs -->
-<div class="fixed top-[-10%] left-[-10%] w-[40%] h-[40%] bg-white/5 rounded-full blur-[120px] pointer-events-none"></div>
-<div class="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-white/5 rounded-full blur-[120px] pointer-events-none"></div>
-
-<!-- Stats Modal -->
-<div id="stats-modal" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm hidden opacity-0 transition-opacity duration-300">
-    <div class="glass-card bg-surface/90 border border-white/10 rounded-2xl p-8 max-w-sm w-full mx-4 text-center relative animate-pop-up">
-        <button id="close-stats-btn" class="absolute top-4 right-4 p-1 hover:text-white text-outline transition-colors">
-            <span class="material-symbols-outlined">close</span>
+      <div style="display:flex; align-items:center; gap:10px;">
+        <button id="stats-btn" class="nav-btn" title="Statistics">
+          <span class="material-symbols-outlined" style="font-size:18px;">bar_chart</span>
+          <span style="font-size:13px;">Stats</span>
         </button>
-        <h2 class="font-headline-md text-2xl mb-6 text-on-surface">Your Statistics</h2>
-        <div class="flex justify-around mb-8">
-            <div class="flex flex-col items-center">
-                <span id="stats-total-played" class="font-display-lg text-4xl text-primary">0</span>
-                <span class="font-label-sm uppercase tracking-widest text-outline mt-2">Played</span>
-            </div>
-            <div class="flex flex-col items-center">
-                <span id="stats-current-streak" class="font-display-lg text-4xl text-match-success">0</span>
-                <span class="font-label-sm uppercase tracking-widest text-outline mt-2">Streak</span>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Login Modal -->
-<div id="login-modal" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm hidden opacity-0 transition-opacity duration-300">
-    <div class="glass-card bg-surface/90 border border-white/10 rounded-2xl p-8 max-w-sm w-full mx-4 relative animate-pop-up">
-        <button id="close-login-btn" class="absolute top-4 right-4 p-1 hover:text-white text-outline transition-colors">
-            <span class="material-symbols-outlined">close</span>
+        <button id="login-btn" class="nav-btn" title="Sign In">
+          <span id="user-icon" class="material-symbols-outlined" style="font-size:18px;">person</span>
+          <span id="user-name"></span>
         </button>
-        <h2 id="login-title" class="font-headline-md text-2xl mb-6 text-on-surface text-center">Sign In</h2>
-        
-        <form id="login-form" class="flex flex-col gap-4">
-            <div>
-                <label class="font-label-sm text-outline mb-1 block">Username</label>
-                <input id="login-username" type="text" required class="w-full bg-surface-variant border border-white/10 rounded-lg px-4 py-2 text-on-surface focus:outline-none focus:border-primary transition-colors">
-            </div>
-            <div>
-                <label class="font-label-sm text-outline mb-1 block">Password</label>
-                <input id="login-password" type="password" required class="w-full bg-surface-variant border border-white/10 rounded-lg px-4 py-2 text-on-surface focus:outline-none focus:border-primary transition-colors">
-            </div>
-            <button type="submit" class="mt-4 bg-primary text-on-primary font-label-md py-2.5 rounded-lg hover:opacity-90 transition-opacity">Submit</button>
-            <p class="text-center font-body-sm text-outline mt-4">
-                <span id="login-toggle-text">Don't have an account?</span> 
-                <a href="#" id="login-toggle-link" class="text-primary hover:underline">Register</a>
-            </p>
-            <p class="text-center font-body-sm text-outline mt-2">
-                <a href="#" id="forgot-password-link" class="text-error/80 hover:text-error hover:underline transition-colors text-xs">Forgot password? (Clear mock accounts)</a>
-            </p>
-        </form>
+        <a href="gameplay.html" class="nav-btn nav-btn-accent">
+          <span class="material-symbols-outlined" style="font-size:18px;">play_arrow</span>
+          Play Now
+        </a>
+      </div>
     </div>
-</div>
+  </header>
 
-<script src="shared.js"></script>
-<script src="data.js"></script>
-<script>
+  <!-- HERO SECTION -->
+  <main>
+    <section class="hero-section">
+      <div class="hero-badge">
+        <span class="material-symbols-outlined" style="font-size:14px;">auto_awesome</span>
+        Daily Anime Challenge
+      </div>
+
+      <h1 class="hero-title">ANIDAMN</h1>
+
+      <p class="hero-subtitle">
+        10 guesses. 250+ anime. <br>Prove you're a true weeb.
+      </p>
+
+      <a href="gameplay.html" class="hero-cta" id="main-play-btn">
+        <span class="material-symbols-outlined"
+          style="font-size:22px; font-variation-settings:'FILL' 1;">play_circle</span>
+        Start Guessing
+      </a>
+
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="hero-stat-num">250+</div>
+          <div class="hero-stat-label">Anime</div>
+        </div>
+        <div class="hero-stat" style="border-left:1px solid rgba(255,255,255,0.08); padding-left:48px;">
+          <div class="hero-stat-num">10</div>
+          <div class="hero-stat-label">Guesses</div>
+        </div>
+        <div class="hero-stat" style="border-left:1px solid rgba(255,255,255,0.08); padding-left:48px;">
+          <div class="hero-stat-num">6</div>
+          <div class="hero-stat-label">Attributes</div>
+        </div>
+      </div>
+
+      <div class="scroll-indicator">
+        <span>Scroll</span>
+        <span class="material-symbols-outlined" style="font-size:16px;">keyboard_arrow_down</span>
+      </div>
+    </section>
+
+    <!-- CONTENT -->
+    <div class="content-wrap">
+
+      <!-- Yesterday's Reveal -->
+      <div class="yesterday-strip" style="padding:0; margin-bottom:48px; text-align:center;">
+        <div class="yesterday-pill" style="display:inline-flex;">
+          <div class="dot"></div>
+          <span class="label">Yesterday's Anime</span>
+          <span style="color:rgba(255,255,255,0.2);">|</span>
+          <span class="value" id="landing-yesterday">Loading...</span>
+        </div>
+      </div>
+
+      <!-- Two column grid -->
+      <div class="grid-2">
+
+        <!-- ANIME FACTS -->
+        <section>
+          <div class="section-label">
+            <span class="material-symbols-outlined" style="font-size:14px; color:var(--accent);">lightbulb</span>
+            Did You Know
+          </div>
+          <div class="glass-panel" style="padding:28px;">
+            <h2 class="section-title" style="margin-bottom:20px;">10 Wild Anime Facts</h2>
+            <div
+              style="display:flex; flex-direction:column; gap:10px; max-height:480px; overflow-y:auto; padding-right:8px;">
+
+              <div class="fact-item">
+                <div class="fact-num">01</div>
+                <p class="fact-text"><strong>Spirited Away</strong> is the only anime film to ever win an Academy Award
+                  (Best Animated Feature, 2003).</p>
+              </div>
+              <div class="fact-item">
+                <div class="fact-num">02</div>
+                <p class="fact-text"><strong>Demon Slayer: Mugen Train</strong> became the highest-grossing anime film
+                  ever, earning over $500M worldwide.</p>
+              </div>
+              <div class="fact-item">
+                <div class="fact-num">03</div>
+                <p class="fact-text">Over <strong>60% of the world's</strong> animation-based content is anime. Japan
+                  dominates the industry.</p>
+              </div>
+              <div class="fact-item">
+                <div class="fact-num">04</div>
+                <p class="fact-text"><strong>Sazae-san</strong> is the longest running anime series — over 7,500
+                  episodes since 1969. Insane.</p>
+              </div>
+              <div class="fact-item">
+                <div class="fact-num">05</div>
+                <p class="fact-text"><strong>Studio Ghibli</strong> gets its name from the Arabic word for the hot
+                  Saharan desert wind.</p>
+              </div>
+              <div class="fact-item">
+                <div class="fact-num">06</div>
+                <p class="fact-text">The titans in <strong>Attack on Titan</strong> were inspired by a drunk person
+                  creator Isayama saw in an internet cafe.</p>
+              </div>
+              <div class="fact-item">
+                <div class="fact-num">07</div>
+                <p class="fact-text"><strong>One Piece</strong> holds the Guinness World Record for the most copies ever
+                  published by a single author.</p>
+              </div>
+              <div class="fact-item">
+                <div class="fact-num">08</div>
+                <p class="fact-text">The first anime to air in the US was <strong>Astro Boy</strong> back in 1963. OG.
+                </p>
+              </div>
+              <div class="fact-item">
+                <div class="fact-num">09</div>
+                <p class="fact-text"><strong>Death Note</strong> was briefly banned in China after students started
+                  writing teachers' names in fake death notes.</p>
+              </div>
+              <div class="fact-item">
+                <div class="fact-num">10</div>
+                <p class="fact-text">The Pizza Hut placements in <strong>Code Geass</strong> were part of an actual
+                  real-world marketing deal in Japan.</p>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+        <!-- MINI QUIZ -->
+        <section>
+          <div class="section-label">
+            <span class="material-symbols-outlined" style="font-size:14px; color:var(--accent);">quiz</span>
+            Test Yourself
+          </div>
+          <div class="glass-panel" style="padding:28px; min-height:400px; display:flex; flex-direction:column;">
+            <h2 class="section-title" style="margin-bottom:20px;">Anime Trivia</h2>
+
+            <div id="quiz-container" style="flex:1; display:flex; flex-direction:column; justify-content:center;">
+              <!-- Progress bar -->
+              <div style="display:flex; align-items:center; gap:12px; margin-bottom:24px;">
+                <div
+                  style="flex:1; height:3px; background:rgba(255,255,255,0.08); border-radius:99px; overflow:hidden;">
+                  <div id="quiz-progress-bar"
+                    style="height:100%; background:var(--accent); width:0%; transition:width 0.4s;"></div>
+                </div>
+                <span id="quiz-progress-text"
+                  style="font-size:12px; color:rgba(255,255,255,0.4); font-variant-numeric:tabular-nums;">1/5</span>
+              </div>
+
+              <h3 id="quiz-question"
+                style="font-size:17px; font-weight:600; color:#fff; line-height:1.5; margin-bottom:20px;">Loading...
+              </h3>
+
+              <div id="quiz-options" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;"></div>
+
+              <div id="quiz-feedback"
+                style="display:none; margin-top:16px; padding:12px 16px; border-radius:10px; text-align:center; font-size:14px; font-weight:600;">
+              </div>
+
+              <button id="quiz-next-btn"
+                style="display:none; margin-top:16px; padding:12px 24px; border-radius:100px; background:var(--accent); border:none; color:#0a0a0f; font-weight:700; font-family:'Space Grotesk',sans-serif; cursor:pointer; transition:all 0.2s; font-size:14px;">
+                Next Question →
+              </button>
+            </div>
+
+            <!-- Score -->
+            <div id="quiz-score-display"
+              style="margin-top:20px; padding-top:16px; border-top:1px solid rgba(255,255,255,0.06); display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-size:13px; color:rgba(255,255,255,0.35);">Score</span>
+              <span id="quiz-score-text"
+                style="font-family:'Bebas Neue',sans-serif; font-size:24px; color:var(--accent);">0 / 5</span>
+            </div>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- HOW TO PLAY -->
+      <section style="margin-top:64px;">
+        <div class="section-label">
+          <span class="material-symbols-outlined" style="font-size:14px; color:var(--accent);">help</span>
+          How It Works
+        </div>
+        <div class="glass-panel" style="padding:40px;">
+          <h2 class="section-title" style="text-align:center; margin-bottom:40px;">How to Play ANIDAMN</h2>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:24px;">
+
+            <div
+              style="text-align:center; padding:24px; border-radius:14px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.04);">
+              <div
+                style="width:52px; height:52px; border-radius:14px; background:rgba(245,197,24,0.12); border:1px solid rgba(245,197,24,0.2); display:flex; align-items:center; justify-content:center; margin:0 auto 16px;">
+                <span class="material-symbols-outlined" style="font-size:24px; color:var(--accent);">search</span>
+              </div>
+              <h3 style="font-weight:700; font-size:15px; margin-bottom:8px; color:#fff;">Search an Anime</h3>
+              <p style="font-size:13px; color:rgba(255,255,255,0.45); line-height:1.6;">Type any anime name in the
+                search bar and select your guess.</p>
+            </div>
+
+            <div
+              style="text-align:center; padding:24px; border-radius:14px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.04);">
+              <div
+                style="width:52px; height:52px; border-radius:14px; background:rgba(245,197,24,0.12); border:1px solid rgba(245,197,24,0.2); display:flex; align-items:center; justify-content:center; margin:0 auto 16px;">
+                <span class="material-symbols-outlined" style="font-size:24px; color:var(--accent);">view_module</span>
+              </div>
+              <h3 style="font-weight:700; font-size:15px; margin-bottom:8px; color:#fff;">Read the Clues</h3>
+              <p style="font-size:13px; color:rgba(255,255,255,0.45); line-height:1.6;">6 attributes flip to reveal how
+                close your guess is to the target.</p>
+            </div>
+
+            <div
+              style="text-align:center; padding:24px; border-radius:14px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.04);">
+              <div
+                style="width:52px; height:52px; border-radius:14px; background:rgba(245,197,24,0.12); border:1px solid rgba(245,197,24,0.2); display:flex; align-items:center; justify-content:center; margin:0 auto 16px;">
+                <span class="material-symbols-outlined" style="font-size:24px; color:var(--accent);">emoji_events</span>
+              </div>
+              <h3 style="font-weight:700; font-size:15px; margin-bottom:8px; color:#fff;">Guess in 10 or Less</h3>
+              <p style="font-size:13px; color:rgba(255,255,255,0.45); line-height:1.6;">Green = match, yellow = close,
+                grey = miss. Identify the anime!</p>
+            </div>
+
+            <div
+              style="text-align:center; padding:24px; border-radius:14px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.04);">
+              <div
+                style="width:52px; height:52px; border-radius:14px; background:rgba(245,197,24,0.12); border:1px solid rgba(245,197,24,0.2); display:flex; align-items:center; justify-content:center; margin:0 auto 16px;">
+                <span class="material-symbols-outlined"
+                  style="font-size:24px; color:var(--accent);">local_fire_department</span>
+              </div>
+              <h3 style="font-weight:700; font-size:15px; margin-bottom:8px; color:#fff;">Build Your Streak</h3>
+              <p style="font-size:13px; color:rgba(255,255,255,0.45); line-height:1.6;">Come back daily. New anime every
+                day. Keep the streak alive!</p>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Mobile Bottom Nav -->
+  <nav class="bottom-nav" style="display:none;" id="mobile-nav">
+    <a href="gameplay.html" class="bottom-nav-item active">
+      <span class="material-symbols-outlined"
+        style="font-size:22px; font-variation-settings:'FILL' 1;">sports_esports</span>
+      Play
+    </a>
+    <button class="bottom-nav-item" id="stats-btn-mobile">
+      <span class="material-symbols-outlined" style="font-size:22px;">bar_chart</span>
+      Stats
+    </button>
+    <button class="bottom-nav-item" id="login-btn-mobile">
+      <span class="material-symbols-outlined" style="font-size:22px;">person</span>
+      Account
+    </button>
+    <button class="bottom-nav-item" id="feedback-btn-mobile">
+      <span class="material-symbols-outlined" style="font-size:22px;">rate_review</span>
+      Feedback
+    </button>
+  </nav>
+
+  <!-- STATS MODAL -->
+  <div id="stats-modal" class="modal-backdrop" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <button class="modal-close" id="close-stats-btn">
+        <span class="material-symbols-outlined" style="font-size:18px;">close</span>
+      </button>
+      <div class="modal-title">Your Stats</div>
+      <div style="display:flex; justify-content:center; gap:48px; margin-bottom:32px;">
+        <div style="text-align:center;">
+          <div class="stat-big" id="stats-total-played">0</div>
+          <div
+            style="font-size:11px; color:rgba(255,255,255,0.4); letter-spacing:0.1em; text-transform:uppercase; margin-top:4px;">
+            Played</div>
+        </div>
+        <div style="text-align:center; border-left:1px solid rgba(255,255,255,0.08); padding-left:48px;">
+          <div class="stat-big" id="stats-current-streak" style="color:#7fe27f;">0</div>
+          <div
+            style="font-size:11px; color:rgba(255,255,255,0.4); letter-spacing:0.1em; text-transform:uppercase; margin-top:4px;">
+            Streak 🔥</div>
+        </div>
+      </div>
+      <a href="gameplay.html"
+        style="display:block; text-align:center; padding:14px; background:var(--accent); border-radius:12px; color:#0a0a0f; font-weight:700; font-family:'Space Grotesk',sans-serif; text-decoration:none; transition:all 0.2s;">
+        Play Today's Challenge
+      </a>
+    </div>
+  </div>
+
+  <!-- LOGIN MODAL -->
+  <div id="login-modal" class="modal-backdrop" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <button class="modal-close" id="close-login-btn">
+        <span class="material-symbols-outlined" style="font-size:18px;">close</span>
+      </button>
+      <div class="modal-title" id="login-title">Sign In</div>
+      <form id="login-form" style="display:flex; flex-direction:column; gap:16px;">
+        <div>
+          <label class="form-label" for="login-username">Username</label>
+          <input class="form-input" id="login-username" type="text" required autocomplete="username"
+            placeholder="your_username">
+        </div>
+        <div>
+          <label class="form-label" for="login-password">Password</label>
+          <input class="form-input" id="login-password" type="password" required autocomplete="current-password"
+            placeholder="••••••••">
+        </div>
+        <button type="submit" class="form-btn">Submit</button>
+        <div style="text-align:center; font-size:13px; color:rgba(255,255,255,0.4);">
+          <span id="login-toggle-text">Don't have an account?</span>
+          <a href="#" id="login-toggle-link"
+            style="color:var(--accent); text-decoration:none; font-weight:600; margin-left:4px;">Register</a>
+        </div>
+        <div style="text-align:center;">
+          <a href="#" id="forgot-password-link"
+            style="font-size:12px; color:rgba(255,255,255,0.25); text-decoration:none;">Forgot password? (Clear
+            accounts)</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- FEEDBACK MODAL -->
+  <div id="feedback-modal" class="modal-backdrop" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <button class="modal-close" id="close-feedback-btn">
+        <span class="material-symbols-outlined" style="font-size:18px;">close</span>
+      </button>
+      <div class="modal-title">Send Feedback</div>
+      <form id="feedback-form" style="display:flex; flex-direction:column; gap:16px;">
+        <div>
+          <label class="form-label" for="feedback-text">Your Thoughts</label>
+          <textarea class="form-input" id="feedback-text" rows="5" required placeholder="Tell us what you think..."
+            style="resize:none;"></textarea>
+        </div>
+        <button type="submit" class="form-btn">Submit Feedback</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="shared.js"></script>
+  <script src="data.js"></script>
+  <script>
+    // Show mobile nav on small screens
+    if (window.innerWidth < 768) {
+      document.getElementById('mobile-nav').style.display = 'flex';
+    }
+    window.addEventListener('resize', () => {
+      document.getElementById('mobile-nav').style.display = window.innerWidth < 768 ? 'flex' : 'none';
+    });
+
+    // Yesterday's anime
     if (typeof ALL_ANIME_DATA !== 'undefined' && typeof getYesterdayTarget !== 'undefined') {
-        const yTarget = getYesterdayTarget(ALL_ANIME_DATA);
-        if (yTarget) {
-            document.getElementById('landing-yesterday').textContent = yTarget.title;
-        }
+      const yTarget = getYesterdayTarget(ALL_ANIME_DATA);
+      if (yTarget) document.getElementById('landing-yesterday').textContent = yTarget.title;
     }
 
-    // Stats Modal Logic
-    const statsBtn = document.getElementById('stats-btn');
-    const statsModal = document.getElementById('stats-modal');
-    const closeStatsBtn = document.getElementById('close-stats-btn');
-    const totalPlayedEl = document.getElementById('stats-total-played');
-    const streakEl = document.getElementById('stats-current-streak');
-
-    statsBtn.addEventListener('click', () => {
-        const total = localStorage.getItem('total_games_played') || '0';
-        const streak = localStorage.getItem('daily_streak') || '0';
-        totalPlayedEl.textContent = total;
-        streakEl.textContent = streak;
-        
-        statsModal.classList.remove('hidden');
-        // trigger reflow
-        void statsModal.offsetWidth;
-        statsModal.classList.remove('opacity-0');
-    });
-
-    function closeStats() {
-        statsModal.classList.add('opacity-0');
-        setTimeout(() => statsModal.classList.add('hidden'), 300);
+    // Modal helpers
+    function openModal(id) {
+      const m = document.getElementById(id);
+      m.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeModal(id) {
+      const m = document.getElementById(id);
+      m.classList.remove('open');
+      document.body.style.overflow = '';
     }
 
-    closeStatsBtn.addEventListener('click', closeStats);
-    statsModal.addEventListener('click', (e) => {
-        if (e.target === statsModal) closeStats();
+    // Close on backdrop click
+    document.querySelectorAll('.modal-backdrop').forEach(m => {
+      m.addEventListener('click', e => { if (e.target === m) closeModal(m.id); });
     });
 
-    // Login/Register Logic
-    const loginBtn = document.getElementById('login-btn');
-    const loginModal = document.getElementById('login-modal');
-    const closeLoginBtn = document.getElementById('close-login-btn');
-    const loginForm = document.getElementById('login-form');
-    const usernameInput = document.getElementById('login-username');
-    const userIcon = document.getElementById('user-icon');
-    const userNameSpan = document.getElementById('user-name');
-    const loginTitle = document.getElementById('login-title');
-    const loginToggleLink = document.getElementById('login-toggle-link');
-    const loginToggleText = document.getElementById('login-toggle-text');
+    // Stats
+    document.getElementById('stats-btn').addEventListener('click', () => {
+      document.getElementById('stats-total-played').textContent = localStorage.getItem('total_games_played') || '0';
+      document.getElementById('stats-current-streak').textContent = localStorage.getItem('daily_streak') || '0';
+      openModal('stats-modal');
+    });
+    document.getElementById('close-stats-btn').addEventListener('click', () => closeModal('stats-modal'));
+
+    // Login
     let isRegistering = false;
-
-    // Check logged in state
     function checkLoginState() {
-        const currentUser = localStorage.getItem('current_user');
-        if (currentUser) {
-            userIcon.textContent = 'account_circle';
-            userNameSpan.textContent = currentUser;
-            userNameSpan.classList.remove('hidden');
-        } else {
-            userIcon.textContent = 'person';
-            userNameSpan.classList.add('hidden');
-        }
+      const user = localStorage.getItem('current_user');
+      const icon = document.getElementById('user-icon');
+      const name = document.getElementById('user-name');
+      if (user) {
+        icon.textContent = 'account_circle';
+        name.textContent = user;
+        name.style.display = 'inline';
+      } else {
+        icon.textContent = 'person';
+        name.style.display = 'none';
+      }
     }
     checkLoginState();
 
-    loginBtn.addEventListener('click', () => {
-        const currentUser = localStorage.getItem('current_user');
-        if (currentUser) {
-            // Logout
-            if (confirm(`Logout from ${currentUser}?`)) {
-                localStorage.removeItem('current_user');
-                checkLoginState();
-            }
-            return;
-        }
-        
-        loginModal.classList.remove('hidden');
-        void loginModal.offsetWidth;
-        loginModal.classList.remove('opacity-0');
+    document.getElementById('login-btn').addEventListener('click', () => {
+      const user = localStorage.getItem('current_user');
+      if (user) {
+        if (confirm(`Logout from ${user}?`)) { localStorage.removeItem('current_user'); checkLoginState(); }
+        return;
+      }
+      openModal('login-modal');
     });
+    document.getElementById('close-login-btn').addEventListener('click', () => closeModal('login-modal'));
 
-    function closeLogin() {
-        loginModal.classList.add('opacity-0');
-        setTimeout(() => loginModal.classList.add('hidden'), 300);
-    }
-
-    closeLoginBtn.addEventListener('click', closeLogin);
-    loginModal.addEventListener('click', (e) => {
-        if (e.target === loginModal) closeLogin();
-    });
-
-    loginToggleLink.addEventListener('click', (e) => {
-        e.preventDefault();
-        isRegistering = !isRegistering;
-        loginTitle.textContent = isRegistering ? "Create Account" : "Sign In";
-        loginToggleText.textContent = isRegistering ? "Already have an account?" : "Don't have an account?";
-        loginToggleLink.textContent = isRegistering ? "Sign In" : "Register";
+    document.getElementById('login-toggle-link').addEventListener('click', (e) => {
+      e.preventDefault();
+      isRegistering = !isRegistering;
+      document.getElementById('login-title').textContent = isRegistering ? 'Create Account' : 'Sign In';
+      document.getElementById('login-toggle-text').textContent = isRegistering ? 'Already have an account?' : "Don't have an account?";
+      document.getElementById('login-toggle-link').textContent = isRegistering ? 'Sign In' : 'Register';
     });
 
     document.getElementById('forgot-password-link').addEventListener('click', (e) => {
-        e.preventDefault();
-        if (confirm("This will clear all registered accounts from local storage so you can start fresh. Continue?")) {
-            localStorage.removeItem('registered_users');
-            alert("Accounts cleared! You can now register a new account.");
-        }
+      e.preventDefault();
+      if (confirm('Clear all saved accounts?')) {
+        localStorage.removeItem('registered_users');
+        alert('Accounts cleared!');
+      }
     });
 
-    loginForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const username = usernameInput.value.trim();
-        const password = document.getElementById('login-password').value;
-        if (!username || !password) return;
-
-        let users = JSON.parse(localStorage.getItem('registered_users') || '{}');
-
-        if (isRegistering) {
-            if (users[username]) {
-                alert("Username already exists! Please Sign In instead.");
-                return;
-            }
-            users[username] = password;
-            localStorage.setItem('registered_users', JSON.stringify(users));
-            alert("Registration successful! Logging you in...");
-        } else {
-            if (!users[username] || users[username] !== password) {
-                alert("Invalid username or password.");
-                return;
-            }
-        }
-
-        localStorage.setItem('current_user', username);
-        checkLoginState();
-        closeLogin();
-        usernameInput.value = '';
-        document.getElementById('login-password').value = '';
+    document.getElementById('login-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const username = document.getElementById('login-username').value.trim();
+      const password = document.getElementById('login-password').value;
+      if (!username || !password) return;
+      let users = JSON.parse(localStorage.getItem('registered_users') || '{}');
+      if (isRegistering) {
+        if (users[username]) { alert('Username already exists!'); return; }
+        users[username] = password;
+        localStorage.setItem('registered_users', JSON.stringify(users));
+        alert('Registered! Logging you in...');
+      } else {
+        if (!users[username] || users[username] !== password) { alert('Invalid credentials.'); return; }
+      }
+      localStorage.setItem('current_user', username);
+      checkLoginState();
+      closeModal('login-modal');
+      document.getElementById('login-username').value = '';
+      document.getElementById('login-password').value = '';
     });
 
-    // Quiz Logic
+    // Feedback
+    document.getElementById('feedback-btn').addEventListener('click', (e) => { e.preventDefault(); openModal('feedback-modal'); });
+    document.getElementById('close-feedback-btn').addEventListener('click', () => closeModal('feedback-modal'));
+    document.getElementById('feedback-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const text = document.getElementById('feedback-text').value.trim();
+      if (!text) return;
+      alert('Thank you for your feedback!');
+      closeModal('feedback-modal');
+      document.getElementById('feedback-text').value = '';
+    });
+
+    // Mobile nav
+    const mobileStatBtn = document.getElementById('stats-btn-mobile');
+    const mobileLoginBtn = document.getElementById('login-btn-mobile');
+    const mobileFeedbackBtn = document.getElementById('feedback-btn-mobile');
+    if (mobileStatBtn) mobileStatBtn.addEventListener('click', () => {
+      document.getElementById('stats-total-played').textContent = localStorage.getItem('total_games_played') || '0';
+      document.getElementById('stats-current-streak').textContent = localStorage.getItem('daily_streak') || '0';
+      openModal('stats-modal');
+    });
+    if (mobileLoginBtn) mobileLoginBtn.addEventListener('click', () => {
+      const user = localStorage.getItem('current_user');
+      if (user) { if (confirm(`Logout from ${user}?`)) { localStorage.removeItem('current_user'); checkLoginState(); } return; }
+      openModal('login-modal');
+    });
+    if (mobileFeedbackBtn) mobileFeedbackBtn.addEventListener('click', () => openModal('feedback-modal'));
+
+    // QUIZ
     const quizData = [
-        { q: "In Naruto, what is the name of the Nine-Tails fox?", options: ["Shukaku", "Kurama", "Matatabi", "Son Goku"], a: 1 },
-        { q: "What is the highest bounty ever known in One Piece?", options: ["Gol D. Roger", "Whitebeard", "Kaido", "Shanks"], a: 0 },
-        { q: "In Fullmetal Alchemist, what is the ultimate taboo among Alchemists?", options: ["Gold Transmutation", "Human Transmutation", "Soul Binding", "Time Transmutation"], a: 1 },
-        { q: "What is the name of the protagonist in Bleach?", options: ["Naruto Uzumaki", "Monkey D. Luffy", "Ichigo Kurosaki", "Edward Elric"], a: 2 },
-        { q: "In Attack on Titan, what is the name of Eren's Titan form?", options: ["Colossal Titan", "Armored Titan", "Attack Titan", "Beast Titan"], a: 2 }
+      { q: "In Naruto, what is the name of the Nine-Tails fox?", options: ["Shukaku", "Kurama", "Matatabi", "Son Goku"], a: 1 },
+      { q: "What is the highest bounty holder in One Piece history?", options: ["Gol D. Roger", "Whitebeard", "Kaido", "Shanks"], a: 0 },
+      { q: "In Fullmetal Alchemist, what is the ultimate taboo among Alchemists?", options: ["Gold Transmutation", "Human Transmutation", "Soul Binding", "Time Transmutation"], a: 1 },
+      { q: "What is the name of the protagonist in Bleach?", options: ["Naruto Uzumaki", "Monkey D. Luffy", "Ichigo Kurosaki", "Edward Elric"], a: 2 },
+      { q: "In Attack on Titan, what is Eren's Titan called?", options: ["Colossal Titan", "Armored Titan", "Attack Titan", "Beast Titan"], a: 2 }
     ];
 
-    let currentQuizIndex = 0;
-    let quizScore = 0;
+    let qIdx = 0, qScore = 0;
+    const qQuestion = document.getElementById('quiz-question');
+    const qOptions = document.getElementById('quiz-options');
+    const qFeedback = document.getElementById('quiz-feedback');
+    const qNextBtn = document.getElementById('quiz-next-btn');
+    const qProgressBar = document.getElementById('quiz-progress-bar');
+    const qProgressText = document.getElementById('quiz-progress-text');
+    const qScoreText = document.getElementById('quiz-score-text');
 
-    const quizQuestionEl = document.getElementById('quiz-question');
-    const quizOptionsEl = document.getElementById('quiz-options');
-    const quizFeedbackEl = document.getElementById('quiz-feedback');
-    const quizNextBtn = document.getElementById('quiz-next-btn');
+    function loadQ() {
+      qFeedback.style.display = 'none';
+      qNextBtn.style.display = 'none';
+      qOptions.innerHTML = '';
 
-    function loadQuizQuestion() {
-        quizFeedbackEl.classList.add('hidden');
-        quizNextBtn.classList.add('hidden');
-        quizOptionsEl.innerHTML = '';
-        
-        if (currentQuizIndex >= quizData.length) {
-            quizQuestionEl.textContent = `Quiz Complete! You scored ${quizScore} out of ${quizData.length}.`;
-            const restartBtn = document.createElement('button');
-            restartBtn.textContent = "Restart Quiz";
-            restartBtn.className = "mt-4 mx-auto bg-primary text-on-primary font-label-md px-6 py-2 rounded-full hover:opacity-90 transition-opacity";
-            restartBtn.onclick = () => {
-                currentQuizIndex = 0;
-                quizScore = 0;
-                loadQuizQuestion();
-            };
-            quizOptionsEl.appendChild(restartBtn);
-            quizOptionsEl.className = "flex justify-center";
-            return;
-        }
+      if (qIdx >= quizData.length) {
+        qQuestion.textContent = `Quiz complete! You scored ${qScore}/${quizData.length} 🎉`;
+        const restartBtn = document.createElement('button');
+        restartBtn.textContent = 'Play Again';
+        restartBtn.className = 'quiz-option';
+        restartBtn.style.cssText = 'background:rgba(245,197,24,0.1); border-color:rgba(245,197,24,0.3); color:var(--accent); font-weight:700; text-align:center;';
+        restartBtn.onclick = () => { qIdx = 0; qScore = 0; qScoreText.textContent = '0 / 5'; loadQ(); };
+        qOptions.appendChild(restartBtn);
+        qProgressBar.style.width = '100%';
+        return;
+      }
 
-        quizOptionsEl.className = "grid grid-cols-1 md:grid-cols-2 gap-4";
-        const qData = quizData[currentQuizIndex];
-        quizQuestionEl.textContent = `Q${currentQuizIndex + 1}: ${qData.q}`;
+      const pct = (qIdx / quizData.length) * 100;
+      qProgressBar.style.width = pct + '%';
+      qProgressText.textContent = `${qIdx + 1}/${quizData.length}`;
+      qScoreText.textContent = `${qScore} / ${quizData.length}`;
 
-        qData.options.forEach((opt, idx) => {
-            const btn = document.createElement('button');
-            btn.textContent = opt;
-            btn.className = "w-full text-left bg-surface-container hover:bg-white/10 border border-white/5 p-4 rounded-xl font-body-md text-on-surface transition-colors";
-            btn.onclick = () => handleQuizAnswer(idx, btn, qData.a);
-            quizOptionsEl.appendChild(btn);
-        });
+      const d = quizData[qIdx];
+      qQuestion.textContent = d.q;
+      d.options.forEach((opt, i) => {
+        const btn = document.createElement('button');
+        btn.textContent = opt;
+        btn.className = 'quiz-option';
+        btn.onclick = () => handleQ(i, btn, d.a);
+        qOptions.appendChild(btn);
+      });
     }
 
-    function handleQuizAnswer(selectedIndex, btnElement, correctIndex) {
-        // Disable all buttons
-        const buttons = quizOptionsEl.querySelectorAll('button');
-        buttons.forEach(b => {
-            b.disabled = true;
-            b.classList.remove('hover:bg-white/10');
-            b.classList.add('opacity-50', 'cursor-default');
-        });
-
-        // Show feedback
-        quizFeedbackEl.classList.remove('hidden');
-        if (selectedIndex === correctIndex) {
-            btnElement.classList.remove('bg-surface-container', 'border-white/5', 'opacity-50');
-            btnElement.classList.add('bg-match-success/20', 'border-match-success', 'text-match-success', 'opacity-100');
-            quizFeedbackEl.textContent = "Correct!";
-            quizFeedbackEl.className = "mt-6 text-center font-label-md py-2 rounded-lg bg-match-success/20 text-match-success border border-match-success/30 animate-pop-up";
-            quizScore++;
-        } else {
-            btnElement.classList.remove('bg-surface-container', 'border-white/5', 'opacity-50');
-            btnElement.classList.add('bg-error/20', 'border-error', 'text-error', 'opacity-100');
-            buttons[correctIndex].classList.remove('bg-surface-container', 'border-white/5', 'opacity-50');
-            buttons[correctIndex].classList.add('bg-match-success/20', 'border-match-success', 'text-match-success', 'opacity-100');
-            quizFeedbackEl.textContent = "Incorrect!";
-            quizFeedbackEl.className = "mt-6 text-center font-label-md py-2 rounded-lg bg-error/20 text-error border border-error/30 animate-pop-up";
-        }
-
-        quizNextBtn.classList.remove('hidden');
+    function handleQ(sel, btn, correct) {
+      qOptions.querySelectorAll('button').forEach(b => {
+        b.disabled = true;
+        b.style.opacity = '0.5';
+        b.style.cursor = 'default';
+      });
+      qFeedback.style.display = 'block';
+      if (sel === correct) {
+        btn.style.cssText = 'background:rgba(127,226,127,0.15); border-color:rgba(127,226,127,0.5); color:#7fe27f; opacity:1; cursor:default;';
+        qFeedback.style.cssText = 'display:block; background:rgba(127,226,127,0.1); border:1px solid rgba(127,226,127,0.3); color:#7fe27f; padding:12px 16px; border-radius:10px; text-align:center; font-weight:600;';
+        qFeedback.textContent = '✓ Correct!';
+        qScore++;
+      } else {
+        btn.style.cssText = 'background:rgba(255,100,100,0.15); border-color:rgba(255,100,100,0.5); color:#ff8080; opacity:1; cursor:default;';
+        qOptions.querySelectorAll('button')[correct].style.cssText = 'background:rgba(127,226,127,0.15); border-color:rgba(127,226,127,0.5); color:#7fe27f; opacity:1; cursor:default;';
+        qFeedback.style.cssText = 'display:block; background:rgba(255,100,100,0.1); border:1px solid rgba(255,100,100,0.3); color:#ff8080; padding:12px 16px; border-radius:10px; text-align:center; font-weight:600;';
+        qFeedback.textContent = '✗ Wrong!';
+      }
+      qScoreText.textContent = `${qScore} / ${quizData.length}`;
+      qNextBtn.style.display = 'block';
     }
 
-    quizNextBtn.addEventListener('click', () => {
-        currentQuizIndex++;
-        loadQuizQuestion();
-    });
+    qNextBtn.addEventListener('click', () => { qIdx++; loadQ(); });
+    loadQ();
+  </script>
+</body>
 
-    // Init Quiz
-    loadQuizQuestion();
-</script>
-</body></html>
+</html>

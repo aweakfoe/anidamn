@@ -1,264 +1,1484 @@
 <!DOCTYPE html>
 <html class="dark" lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>Anidamn - Gameplay</title>
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <script src="shared.js"></script>
-    <script src="data.js"></script>
-    <style>
-        body {
-            background-color: #121414;
-            color: #e3e2e2;
-        }
-        .frequency-wave {
-            mask-image: linear-gradient(to right, transparent, black, transparent);
-            opacity: 0.2;
-        }
-        .glass-card {
-            background: rgba(255, 255, 255, 0.02);
-            backdrop-filter: blur(24px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.03), transparent);
-        }
-        .glow-button {
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
-        }
-        .glow-button:hover {
-            box-shadow: 0 0 35px rgba(255, 255, 255, 0.2);
-            transform: scale(1.02);
-        }
-        .cinematic-hero-bg {
-            background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), transparent);
-        }
-        @keyframes fade-in {
-            0% { opacity: 0; }
-            100% { opacity: 1; }
-        }
-        .animate-fade-in {
-            animation: fade-in 0.3s ease-out forwards;
-        }
-        @keyframes cinematicReveal {
-            0% {
-                opacity: 0;
-                filter: blur(30px);
-                transform: scale(1.15) translateY(30px);
-                letter-spacing: -0.15em;
-            }
-            100% {
-                opacity: 1;
-                filter: blur(0);
-                transform: scale(1) translateY(0);
-                letter-spacing: 0.05em;
-            }
-        }
-        .animate-cinematic {
-            animation: cinematicReveal 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-        }
-        .attribute-box-inner {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            text-align: center;
-            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-            transform-style: preserve-3d;
-        }
-        .attribute-box-inner.flip {
-            transform: rotateX(180deg);
-        }
-        .attribute-front, .attribute-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            -webkit-backface-visibility: hidden;
-            backface-visibility: hidden;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-        .attribute-back {
-            transform: rotateX(180deg);
-        }
-        .attr-container {
-            perspective: 1000px;
-            height: 90px;
-        }
-    </style>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>ANIDAMN — Guess the Anime</title>
+  <meta name="description" content="Can you guess today's anime? 10 guesses, 6 attributes. Play the daily anime challenge!">
+  <link rel="stylesheet" href="output.css">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700;800;900&family=Press+Start+2P&family=Space+Grotesk:wght@300;400;500;600;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/fuse.js/dist/fuse.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script src="shared.js"></script>
+  <script src="data.js"></script>
+  <style>
+    :root {
+      --accent: #f5c518;
+      --accent-glow: rgba(245, 197, 24, 0.3);
+      --success: #4ade80;
+      --success-glow: rgba(74, 222, 128, 0.2);
+      --warning: #fbbf24;
+      --error: #f87171;
+      --glass-bg: rgba(10, 10, 20, 0.6);
+      --glass-border: rgba(255,255,255,0.07);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: #080810;
+      color: #e8e8f0;
+      min-height: 100vh;
+      overflow-x: hidden;
+      cursor: url('enma.cur'), auto;
+    }
+
+    /* Background */
+    .page-bg {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      background: url('onepiece_bg.png') center/cover no-repeat;
+    }
+    .page-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background: linear-gradient(
+        135deg,
+        rgba(8, 8, 20, 0.88) 0%,
+        rgba(8, 8, 20, 0.75) 50%,
+        rgba(8, 8, 20, 0.92) 100%
+      );
+    }
+
+    /* Header */
+    .header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(8, 8, 20, 0.8);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--glass-border);
+    }
+    .header-inner {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 20px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .game-over-title {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 24px;
+      margin-bottom: 8px;
+      background: linear-gradient(180deg, #fff, #aaa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 1.5;
+    }
+
+    .logo-link {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 24px;
+      letter-spacing: 0.08em;
+      background: linear-gradient(135deg, #ffffff, var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-decoration: none;
+    }
+
+    /* Mode toggle */
+    .mode-toggle {
+      display: flex;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--glass-border);
+      border-radius: 100px;
+      padding: 3px;
+      gap: 2px;
+    }
+    .mode-btn {
+      padding: 6px 16px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      border: none;
+      background: none;
+      color: rgba(255,255,255,0.4);
+      transition: all 0.2s;
+      font-family: 'Space Grotesk', sans-serif;
+    }
+    .mode-btn.active {
+      background: var(--accent);
+      color: #0a0a0f;
+    }
+    .mode-btn:hover:not(.active) {
+      color: rgba(255,255,255,0.8);
+    }
+
+    .streak-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 100px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--glass-border);
+      font-size: 10px;
+      font-weight: 400;
+      font-family: 'Press Start 2P', cursive;
+      letter-spacing: 1px;
+    }
+
+    /* Back link */
+    .back-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 8px;
+      background: none;
+      border: 1px solid rgba(255,255,255,0.08);
+      color: rgba(255,255,255,0.5);
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+      font-family: 'Outfit', sans-serif;
+    }
+    .back-btn:hover { background: rgba(255,255,255,0.06); color: #fff; border-color: rgba(255,255,255,0.15); }
+
+    /* Main content */
+    .main-wrap {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 88px 20px 120px;
+    }
+
+    /* Game header */
+    .game-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .game-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(48px, 10vw, 90px);
+      line-height: 0.9;
+      background: linear-gradient(180deg, #ffffff 20%, rgba(255,255,255,0.5) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 40px rgba(255,255,255,0.1));
+      margin-bottom: 12px;
+    }
+    .game-subtitle {
+      font-size: 15px;
+      color: rgba(255,255,255,0.4);
+      font-weight: 400;
+    }
+
+    /* Guesses left indicator */
+    .guesses-indicator {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-bottom: 28px;
+    }
+    .guess-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.15);
+      transition: all 0.3s;
+    }
+    .guess-dot.used { background: var(--accent); box-shadow: 0 0 8px var(--accent-glow); }
+    .guess-dot.danger { background: var(--error); box-shadow: 0 0 8px rgba(248,113,113,0.4); }
+
+    /* Yesterday banner */
+    .yesterday-banner {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 14px;
+      padding: 14px 20px;
+      margin-bottom: 24px;
+      display: none;
+      align-items: center;
+      gap: 16px;
+    }
+    .yesterday-banner.show { display: flex; animation: fadeUp 0.4s ease; }
+
+    /* Search */
+    .search-wrap {
+      position: relative;
+      margin-bottom: 32px;
+    }
+    .search-input {
+      width: 100%;
+      padding: 18px 20px 18px 52px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      color: #fff;
+      font-size: 16px;
+      font-family: 'Outfit', sans-serif;
+      outline: none;
+      transition: all 0.25s;
+      backdrop-filter: blur(12px);
+    }
+    .search-input:focus {
+      border-color: var(--accent);
+      background: rgba(245,197,24,0.04);
+      box-shadow: 0 0 0 4px rgba(245,197,24,0.08), 0 8px 32px rgba(0,0,0,0.3);
+    }
+    .search-input::placeholder { color: rgba(255,255,255,0.3); }
+    .search-input:disabled { opacity: 0.4; cursor: not-allowed; }
+    .search-icon {
+      position: absolute;
+      left: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: rgba(255,255,255,0.3);
+      font-size: 20px;
+      pointer-events: none;
+      transition: color 0.2s;
+    }
+    .search-wrap:focus-within .search-icon { color: var(--accent); }
+
+    .search-dropdown {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 0; right: 0;
+      background: rgba(12, 12, 24, 0.97);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 14px;
+      overflow: hidden;
+      display: none;
+      z-index: 50;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+      max-height: 280px;
+      overflow-y: auto;
+    }
+    .search-dropdown.visible { display: block; }
+    .search-result-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 16px;
+      cursor: pointer;
+      transition: background 0.15s;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .search-result-item:last-child { border-bottom: none; }
+    .search-result-item:hover { background: rgba(255,255,255,0.06); }
+    .search-result-img {
+      width: 44px; height: 44px;
+      border-radius: 8px;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+    .search-result-title { font-size: 14px; font-weight: 600; color: #fff; }
+    .search-result-meta { font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 2px; }
+
+    /* Game over */
+    .game-over-card {
+      background: rgba(10, 10, 20, 0.8);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 20px;
+      padding: 40px;
+      text-align: center;
+      margin-bottom: 32px;
+      display: none;
+      backdrop-filter: blur(20px);
+      animation: popUp 0.5s cubic-bezier(0.16,1,0.3,1);
+    }
+    .game-over-card.show { display: block; }
+    .game-over-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 52px;
+      line-height: 1;
+      margin-bottom: 12px;
+    }
+    .game-over-title.win { color: var(--success); filter: drop-shadow(0 0 20px var(--success-glow)); }
+    .game-over-title.lose { color: var(--error); }
+    .game-over-desc { font-size: 15px; color: rgba(255,255,255,0.5); margin-bottom: 24px; }
+
+    .target-reveal {
+      display: inline-flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 24px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px;
+    }
+    .target-reveal img {
+      width: 56px; height: 56px;
+      border-radius: 10px;
+      object-fit: cover;
+    }
+    .target-reveal-name {
+      font-size: 20px;
+      font-weight: 700;
+      color: #fff;
+      text-align: left;
+    }
+
+    .play-again-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 20px;
+      padding: 12px 32px;
+      border-radius: 100px;
+      background: var(--accent);
+      border: none;
+      color: #0a0a0f;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: none;
+    }
+    .play-again-btn:hover { background: #ffd44a; box-shadow: 0 0 24px var(--accent-glow); transform: translateY(-2px); }
+
+    /* Guess cards */
+    .guesses-list { display: flex; flex-direction: column; gap: 16px; }
+
+    .guess-card {
+      background: rgba(10, 10, 20, 0.7);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 18px;
+      padding: 20px 24px;
+      backdrop-filter: blur(16px);
+      transition: all 0.3s;
+      animation: fadeUp 0.4s ease;
+    }
+    .guess-card:hover { border-color: rgba(255,255,255,0.14); background: rgba(15,15,30,0.8); }
+
+    .guess-card-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+    .guess-card-img {
+      width: 52px; height: 52px;
+      border-radius: 10px;
+      object-fit: cover;
+      border: 1px solid rgba(255,255,255,0.08);
+      flex-shrink: 0;
+    }
+    .guess-card-title { font-size: 17px; font-weight: 700; color: #fff; }
+    .guess-card-num { font-size: 12px; color: rgba(255,255,255,0.35); letter-spacing: 0.05em; margin-top: 2px; }
+
+    /* Attribute grid */
+    .attr-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    @media (max-width: 500px) { .attr-grid { grid-template-columns: repeat(2, 1fr); } }
+
+    /* 3D Flip boxes */
+    .attr-box-wrap {
+      perspective: 600px;
+      height: 80px;
+    }
+    .attr-box-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .attr-box-inner.flipped { transform: rotateX(180deg); }
+
+    .attr-face {
+      position: absolute;
+      inset: 0;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+    }
+    .attr-front {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .attr-back {
+      transform: rotateX(180deg);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .attr-back.match {
+      background: rgba(74,222,128,0.12);
+      border-color: rgba(74,222,128,0.35);
+    }
+    .attr-back.partial {
+      background: rgba(251,191,36,0.12);
+      border-color: rgba(251,191,36,0.35);
+    }
+    .attr-back.miss {
+      background: rgba(255,255,255,0.03);
+      border-color: rgba(255,255,255,0.08);
+    }
+
+    .attr-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+    }
+    .attr-value {
+      font-size: 13px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+    .attr-value.match { color: var(--success); }
+    .attr-value.partial { color: var(--warning); }
+    .attr-value.miss { color: rgba(255,255,255,0.7); }
+
+    /* Feedback modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(8px);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s;
+    }
+    .modal-backdrop.open { opacity: 1; visibility: visible; }
+    .modal-card {
+      background: rgba(14,14,22,0.97);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 24px;
+      padding: 40px;
+      max-width: 420px;
+      width: 100%;
+      position: relative;
+      transform: scale(0.95) translateY(20px);
+      transition: transform 0.3s cubic-bezier(0.16,1,0.3,1);
+    }
+    .modal-backdrop.open .modal-card { transform: scale(1) translateY(0); }
+    .modal-close {
+      position: absolute; top: 16px; right: 16px;
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: rgba(255,255,255,0.5);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .modal-close:hover { background: rgba(255,255,255,0.12); color: #fff; }
+
+    /* Mystery panel */
+    .mystery-panel {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+      background: rgba(10,10,20,0.6);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 20px;
+      padding: 24px;
+      margin-bottom: 28px;
+      backdrop-filter: blur(16px);
+      position: relative;
+      overflow: hidden;
+    }
+    .mystery-panel::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(245,197,24,0.03), transparent);
+      pointer-events: none;
+    }
+    .mystery-img-wrap {
+      position: relative;
+      flex-shrink: 0;
+      width: 110px;
+      height: 155px;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .mystery-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: filter 0.8s cubic-bezier(0.4,0,0.2,1);
+      filter: blur(40px) brightness(0.7);
+    }
+    .mystery-img-label {
+      position: absolute;
+      bottom: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.5);
+      white-space: nowrap;
+      background: rgba(0,0,0,0.5);
+      padding: 3px 8px;
+      border-radius: 99px;
+      backdrop-filter: blur(8px);
+    }
+    .mystery-info { flex: 1; min-width: 0; }
+    .mystery-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: rgba(245,197,24,0.08);
+      border: 1px solid rgba(245,197,24,0.2);
+      padding: 4px 10px;
+      border-radius: 99px;
+      margin-bottom: 14px;
+    }
+    .mystery-title-label {
+      font-size: 11px;
+      color: rgba(255,255,255,0.3);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .letter-skeleton {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      align-items: flex-end;
+    }
+    .letter-slot {
+      min-width: 16px;
+      height: 28px;
+      border-bottom: 2px solid rgba(255,255,255,0.25);
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding-bottom: 3px;
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+      font-family: 'Space Grotesk', sans-serif;
+      transition: all 0.4s;
+      letter-spacing: 0;
+    }
+    .letter-slot.revealed {
+      border-bottom-color: var(--accent);
+      color: var(--accent);
+      text-shadow: 0 0 12px var(--accent-glow);
+    }
+    .letter-slot.space {
+      min-width: 10px;
+      border-bottom: none;
+    }
+    .mystery-hint {
+      margin-top: 14px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.3);
+      font-style: italic;
+    }
+    .hint-reveal {
+      display: inline-block;
+      background: rgba(245,197,24,0.1);
+      border: 1px solid rgba(245,197,24,0.2);
+      color: var(--accent);
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 11px;
+      animation: popUp 0.4s ease;
+    }
+
+    /* Animations */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes popUp {
+      from { opacity: 0; transform: scale(0.9) translateY(20px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    @keyframes floatMascot {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0); }
+    }
+    .mascot-wrap {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 100;
+      animation: floatMascot 4s ease-in-out infinite;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+    .mascot-img {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      box-shadow: 0 0 20px rgba(245,197,24,0.3);
+      border: 2px solid rgba(245,197,24,0.4);
+      object-fit: cover;
+    }
+    .mascot-label {
+      background: rgba(10,10,20,0.8);
+      border: 1px solid rgba(245,197,24,0.3);
+      padding: 4px 10px;
+      border-radius: 99px;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      backdrop-filter: blur(8px);
+    }
+    @keyframes letterPop {
+      0% { transform: scale(0) translateY(-4px); opacity: 0; }
+      60% { transform: scale(1.2) translateY(0); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .letter-slot.just-revealed {
+      animation: letterPop 0.5s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 99px; }
+
+    /* Gamification Additions */
+    .hp-bar-wrap {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      margin-bottom: 28px;
+    }
+    .hp-segment {
+      width: 28px;
+      height: 12px;
+      background: var(--accent);
+      box-shadow: 0 0 10px rgba(245,197,24,0.4);
+      transform: skew(-20deg);
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .hp-segment.lost {
+      background: rgba(255,255,255,0.1);
+      box-shadow: none;
+      transform: skew(-20deg) scaleY(0.5);
+      opacity: 0.5;
+    }
+    .hp-label {
+      color: rgba(255,255,255,0.5);
+      font-size: 10px;
+      font-family: 'Press Start 2P', cursive;
+      margin-right: 8px;
+      display: flex;
+      align-items: center;
+    }
     
-    <script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    "colors": {
-                        "on-tertiary-fixed": "#1b1b1b",
-                        "primary-fixed": "#e3e2e2",
-                        "on-secondary": "#303031",
-                        "on-primary-fixed": "#1b1c1c",
-                        "on-background": "#e3e2e2",
-                        "tertiary-container": "#919191",
-                        "surface-variant": "#343535",
-                        "on-secondary-container": "#b6b5b5",
-                        "outline-variant": "#444748",
-                        "surface-tint": "#c7c6c6",
-                        "primary": "#c7c6c6",
-                        "on-surface-variant": "#c4c7c7",
-                        "tertiary-fixed": "#e2e2e2",
-                        "tertiary": "#c6c6c6",
-                        "on-tertiary-container": "#2a2a2a",
-                        "secondary": "#c7c6c6",
-                        "tertiary-fixed-dim": "#c6c6c6",
-                        "background": "#121414",
-                        "surface": "#121414",
-                        "surface-container-low": "#1b1c1c",
-                        "surface-dim": "#121414",
-                        "secondary-fixed-dim": "#c7c6c6",
-                        "on-tertiary-fixed-variant": "#474747",
-                        "surface-container-high": "#292a2a",
-                        "on-surface": "#e3e2e2",
-                        "surface-container": "#1f2020",
-                        "on-tertiary": "#303030",
-                        "error": "#ffb4ab",
-                        "primary-container": "#919090",
-                        "primary-fixed-dim": "#c7c6c6",
-                        "inverse-on-surface": "#303031",
-                        "on-primary": "#303031",
-                        "on-error": "#690005",
-                        "on-primary-container": "#292a2a",
-                        "on-primary-fixed-variant": "#464747",
-                        "surface-bright": "#393939",
-                        "on-secondary-fixed-variant": "#464747",
-                        "inverse-primary": "#5e5e5e",
-                        "on-secondary-fixed": "#1b1c1c",
-                        "on-error-container": "#ffdad6",
-                        "error-container": "#93000a",
-                        "surface-container-highest": "#343535",
-                        "surface-container-lowest": "#0d0e0f",
-                        "secondary-container": "#464747",
-                        "inverse-surface": "#e3e2e2",
-                        "secondary-fixed": "#e3e2e2",
-                        "outline": "#8e9192",
-                        "match-success": "#7fe27f"
-                    },
-                    "fontFamily": {
-                        "body-lg": ["Inter"],
-                        "headline-lg": ["Inter"],
-                        "body-sm": ["Inter"],
-                        "label-md": ["Inter"],
-                        "headline-md": ["Inter"],
-                        "label-sm": ["Inter"],
-                        "headline-xl": ["Inter"],
-                        "body-md": ["Inter"],
-                        "label-caps": ["Inter"],
-                        "display-xl": ["Inter"]
-                    }
-                }
-            }
-        }
-    </script>
+    @keyframes screenShake {
+      0% { transform: translate(1px, 1px) rotate(0deg); }
+      10% { transform: translate(-2px, -2px) rotate(-1deg); }
+      20% { transform: translate(-3px, 0px) rotate(1deg); }
+      30% { transform: translate(3px, 2px) rotate(0deg); }
+      40% { transform: translate(1px, -1px) rotate(1deg); }
+      50% { transform: translate(-1px, 2px) rotate(-1deg); }
+      60% { transform: translate(-3px, 1px) rotate(0deg); }
+      70% { transform: translate(3px, 1px) rotate(-1deg); }
+      80% { transform: translate(-1px, -1px) rotate(1deg); }
+      90% { transform: translate(1px, 2px) rotate(0deg); }
+      100% { transform: translate(0px, 0px) rotate(0deg); }
+    }
+    .shake { animation: screenShake 0.4s; }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.8);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .modal-overlay.show { display: flex; opacity: 1; }
+    .modal-content {
+      background: rgba(15,15,25,0.95);
+      border: 1px solid var(--accent);
+      box-shadow: 0 0 30px rgba(245,197,24,0.2);
+      border-radius: 16px;
+      padding: 32px;
+      max-width: 500px;
+      width: 90%;
+      position: relative;
+      transform: translateY(20px);
+      transition: transform 0.3s;
+      font-family: 'Outfit', sans-serif;
+      color: #ddd;
+    }
+    .modal-overlay.show .modal-content { transform: translateY(0); }
+    .modal-close {
+      position: absolute; top: 16px; right: 16px;
+      background: none; border: none; color: #fff;
+      font-size: 24px; cursor: pointer;
+    }
+    
+    /* Particles */
+    .cursor-particle {
+      position: fixed;
+      width: 6px;
+      height: 6px;
+      background: var(--accent);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      box-shadow: 0 0 10px var(--accent);
+      animation: fadeParticle 0.8s forwards;
+    }
+    @keyframes fadeParticle {
+      0% { opacity: 1; transform: scale(1) translateY(0); }
+      100% { opacity: 0; transform: scale(0) translateY(20px); }
+    }
+
+    .how-to-btn {
+      background: none;
+      border: 1px solid rgba(255,255,255,0.2);
+      color: rgba(255,255,255,0.7);
+      padding: 4px 12px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-family: 'Space Grotesk', sans-serif;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .how-to-btn:hover {
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+    }
+
+    #mystery-hint, .hint-reveal { font-family: 'Press Start 2P', cursive !important; font-size: 10px !important; line-height: 1.5; letter-spacing: 1px; }
+    .guess-card-num { font-family: 'Press Start 2P', cursive !important; font-size: 8px !important; letter-spacing: 1px; color: rgba(255,255,255,0.4); }
+    #play-again-btn { font-family: 'Press Start 2P', cursive !important; font-size: 10px !important; letter-spacing: 2px; }
+    #target-reveal-name { font-family: 'Press Start 2P', cursive !important; font-size: 16px !important; margin-top: 8px; }
+    .game-over-desc { font-family: 'Press Start 2P', cursive !important; font-size: 10px !important; line-height: 1.5; color: rgba(255,255,255,0.7); }
+    .how-to-btn { font-family: 'Press Start 2P', cursive !important; font-size: 8px !important; letter-spacing: 1px; }
+    .search-result-title { font-family: 'Press Start 2P', cursive !important; font-size: 10px !important; margin-bottom: 4px; }
+    .search-result-meta { font-family: 'Press Start 2P', cursive !important; font-size: 8px !important; color: rgba(255,255,255,0.5); }
+    .game-title { font-family: 'Press Start 2P', cursive !important; font-size: 20px !important; text-shadow: 2px 2px 0 var(--accent); margin-bottom: 12px; }
+    .game-subtitle { font-family: 'Press Start 2P', cursive !important; font-size: 8px !important; letter-spacing: 1px; }
+  </style>
 </head>
-<body class="bg-transparent text-on-background min-h-screen relative overflow-x-hidden antialiased">
-    
-    <!-- Image Background (Full Page) -->
-    <div class="fixed top-0 left-0 w-full h-full z-[-2] pointer-events-none bg-[url('onepiece_bg.png')] bg-cover bg-center bg-no-repeat"></div>
-    <div class="fixed top-0 left-0 w-full h-full bg-black/40 z-[-1] pointer-events-none"></div>
-    
-    <!-- Frequency Wave Graphic -->
-    <div class="fixed top-[30%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-48 pointer-events-none frequency-wave flex items-center justify-center overflow-hidden z-[-1]">
-        <svg class="w-full h-full text-surface-variant opacity-40" viewBox="0 0 1000 100">
-            <path d="M0,50 Q25,0 50,50 T100,50 T150,50 T200,50 T250,50 T300,50 T350,50 T400,50 T450,50 T500,50 T550,50 T600,50 T650,50 T700,50 T750,50 T800,50 T850,50 T900,50 T950,50 T1000,50" fill="none" stroke="currentColor" stroke-width="1.5"></path>
-        </svg>
+<body>
+
+<!-- Background -->
+<div class="page-bg"></div>
+<div class="page-overlay"></div>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-inner">
+    <div style="display:flex; align-items:center; gap:12px;">
+      <a href="index.html" class="back-btn">
+        <span class="material-symbols-outlined" style="font-size:16px;">arrow_back</span>
+        <span style="display:none;" class="back-label">Home</span>
+      </a>
+      <a href="index.html" class="logo-link">ANIDAMN</a>
+      <button class="how-to-btn" id="how-to-btn">How To Play</button>
     </div>
 
-    <header class="fixed top-0 left-0 w-full z-50 transition-all duration-300 bg-surface/80 backdrop-blur-md border-b border-white/5">
-        <div class="max-w-[1440px] mx-auto px-6 h-20 flex items-center justify-between">
-            <div class="flex items-center gap-4 relative group">
-                <button class="p-2 rounded-full hover:bg-white/5 transition-all active:scale-95 flex items-center justify-center">
-                    <span class="material-symbols-outlined text-on-background">menu</span>
-                </button>
-                <div class="absolute top-full left-0 mt-2 w-48 bg-surface-container-high border border-white/10 rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 flex flex-col overflow-hidden">
-                    <a href="index.html" class="px-4 py-3 hover:bg-white/5 text-on-surface font-body-sm flex items-center gap-2">
-                        <span class="material-symbols-outlined text-sm">home</span>
-                        Home Page
-                    </a>
-                    <a href="#" class="px-4 py-3 hover:bg-white/5 text-on-surface font-body-sm flex items-center gap-2 border-t border-white/5">
-                        <span class="material-symbols-outlined text-sm">feedback</span>
-                        Feedback Form
-                    </a>
-                </div>
-            </div>
-            
-            <div class="flex items-center gap-6">
-                <!-- Modes Toggle -->
-                <div class="flex items-center bg-surface-variant p-1 rounded-full border border-white/10">
-                    <button id="daily-mode-btn" class="px-4 py-1.5 rounded-full font-label-caps text-xs transition-colors bg-white/10 text-on-surface">Daily</button>
-                    <button id="unlimited-mode-btn" class="px-4 py-1.5 rounded-full font-label-caps text-xs transition-colors text-outline hover:text-on-surface">Unlimited</button>
-                </div>
-                
-                <div class="flex items-center gap-2 px-3 py-1 bg-surface-container rounded-full border border-white/10">
-                    <span class="text-lg">🔥</span>
-                    <span id="streak-counter" class="font-space-grotesk font-bold text-sm">0</span>
-                </div>
-            </div>
+    <div style="display:flex; align-items:center; gap:10px;">
+      <div class="mode-toggle">
+        <button id="daily-mode-btn" class="mode-btn active">Daily</button>
+        <button id="unlimited-mode-btn" class="mode-btn">Unlimited</button>
+      </div>
+
+      <div class="streak-badge">
+        <span>🔥 COMBO</span>
+        <span id="streak-counter">0</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- MAIN -->
+<main class="main-wrap">
+
+  <!-- Game header -->
+  <div class="game-header">
+    <h1 class="game-title">GUESS THE ANIME</h1>
+    <p class="game-subtitle">Type an anime title · 10 guesses · 6 attributes</p>
+  </div>
+
+  <!-- MYSTERY PANEL: blur image + letter skeleton -->
+  <div class="mystery-panel" id="mystery-panel">
+    <div class="mystery-img-wrap">
+      <img id="mystery-img" src="" alt="Mystery anime" class="mystery-img">
+      <div class="mystery-img-label" id="mystery-img-label">? Blurred</div>
+    </div>
+    <div class="mystery-info">
+      <div class="mystery-tag">
+        <span class="material-symbols-outlined" style="font-size:13px;">visibility_off</span>
+        Mystery Anime
+      </div>
+      <div class="mystery-title-label">Guess the title:</div>
+      <div class="letter-skeleton" id="letter-skeleton"></div>
+      <div class="mystery-hint" id="mystery-hint">Make a guess to start revealing clues!</div>
+    </div>
+  </div>
+
+  <!-- HP Bar indicator -->
+  <div class="hp-bar-wrap" id="hp-bar-wrap">
+    <div class="hp-label">HP</div>
+    <div class="hp-segment" id="hp-1"></div>
+    <div class="hp-segment" id="hp-2"></div>
+    <div class="hp-segment" id="hp-3"></div>
+    <div class="hp-segment" id="hp-4"></div>
+    <div class="hp-segment" id="hp-5"></div>
+    <div class="hp-segment" id="hp-6"></div>
+    <div class="hp-segment" id="hp-7"></div>
+    <div class="hp-segment" id="hp-8"></div>
+    <div class="hp-segment" id="hp-9"></div>
+    <div class="hp-segment" id="hp-10"></div>
+  </div>
+
+  <!-- Yesterday banner -->
+  <div class="yesterday-banner" id="yesterday-banner">
+    <img id="yesterday-img" src="" alt="" style="width:40px;height:40px;border-radius:8px;object-fit:cover;">
+    <div>
+      <div style="font-size:11px; color:rgba(255,255,255,0.35); letter-spacing:0.1em; text-transform:uppercase; margin-bottom:2px;">Yesterday's Anime</div>
+      <div id="yesterday-title" style="font-size:15px; font-weight:700; color:#fff;"></div>
+    </div>
+  </div>
+
+  <!-- Search -->
+  <div class="search-wrap">
+    <span class="material-symbols-outlined search-icon">search</span>
+    <input
+      id="search-input"
+      class="search-input"
+      type="text"
+      placeholder="Search for an anime..."
+      autocomplete="off"
+      spellcheck="false"
+    >
+    <div id="search-results" class="search-dropdown"></div>
+  </div>
+
+  <!-- Attribute legend -->
+  <div style="display:flex; align-items:center; gap:16px; margin-bottom:28px; padding:12px 16px; border-radius:10px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.04);">
+    <div style="display:flex; align-items:center; gap:6px; font-size:12px; color:rgba(255,255,255,0.5);">
+      <div style="width:10px;height:10px;border-radius:50%;background:rgba(74,222,128,0.8);flex-shrink:0;"></div> Match
+    </div>
+    <div style="display:flex; align-items:center; gap:6px; font-size:12px; color:rgba(255,255,255,0.5);">
+      <div style="width:10px;height:10px;border-radius:50%;background:rgba(251,191,36,0.8);flex-shrink:0;"></div> Close
+    </div>
+    <div style="display:flex; align-items:center; gap:6px; font-size:12px; color:rgba(255,255,255,0.5);">
+      <div style="width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.2);flex-shrink:0;"></div> Miss
+    </div>
+    <div style="margin-left:auto; font-size:12px; color:rgba(255,255,255,0.3);">↑↓ = direction hint</div>
+  </div>
+
+  <!-- Game Over Card -->
+  <div class="game-over-card" id="game-over-container">
+    <div class="game-over-title" id="game-over-title"></div>
+    <p class="game-over-desc" id="game-over-desc"></p>
+    <div class="target-reveal">
+      <img id="target-reveal-img" src="" alt="">
+      <div>
+        <div style="font-size:11px; color:rgba(255,255,255,0.35); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:4px;">The Answer Was</div>
+        <div class="target-reveal-name" id="target-reveal-name"></div>
+      </div>
+    </div>
+    <br>
+    <button id="play-again-btn" class="play-again-btn">
+      <span class="material-symbols-outlined" style="font-size:18px;">refresh</span>
+      Play Again
+    </button>
+  </div>
+
+  <!-- Guesses list -->
+  <div id="guesses-container" class="guesses-list"></div>
+
+</main>
+
+<!-- How To Play Modal -->
+<div class="modal-overlay" id="how-to-modal">
+  <div class="modal-content">
+    <button class="modal-close" id="modal-close-btn">&times;</button>
+    <h2 style="font-family:'Press Start 2P',cursive; font-size:20px; line-height:1.4; color:var(--accent); margin-bottom:16px;">HOW TO PLAY</h2>
+    <p style="margin-bottom:16px; line-height:1.5;">Type an anime title to make a guess. You have <strong>10 HP</strong>. If your HP hits 0, it's GAME OVER.</p>
+    <ul style="list-style:none; margin-bottom:20px; display:flex; flex-direction:column; gap:10px;">
+      <li><span style="color:#4ade80; font-weight:bold;">Green</span> = Exact Match</li>
+      <li><span style="color:#f5c518; font-weight:bold;">Yellow</span> = Close Match</li>
+      <li><span style="font-weight:bold;">↑ / ↓ Arrows</span> = Target is higher/lower</li>
+    </ul>
+    <h3 style="color:var(--accent); margin-bottom:8px;">Clues Unlocked as you lose HP:</h3>
+    <p style="font-size:14px; color:#aaa; line-height:1.5;">
+      <strong>Progressive Blur:</strong> The target image becomes clearer with every wrong guess.<br><br>
+      <strong>Letter Skeleton:</strong> Letters of the title will randomly unlock at your 3rd, 6th, and 9th guess.
+    </p>
+  </div>
+</div>
+
+<!-- Feedback Modal -->
+<div id="feedback-modal" class="modal-backdrop">
+  <div class="modal-card">
+    <button class="modal-close" id="close-feedback-btn">
+      <span class="material-symbols-outlined" style="font-size:18px;">close</span>
+    </button>
+    <div style="font-family:'Space Grotesk',sans-serif; font-size:22px; font-weight:700; color:#fff; margin-bottom:28px; text-align:center;">Feedback</div>
+    <form id="feedback-form" style="display:flex; flex-direction:column; gap:16px;">
+      <div>
+        <label style="display:block; font-size:12px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:rgba(255,255,255,0.4); margin-bottom:8px;">Your Thoughts</label>
+        <textarea id="feedback-text" rows="5" required
+          style="width:100%; padding:12px 16px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:10px; color:#fff; font-size:15px; font-family:'Outfit',sans-serif; outline:none; resize:none; transition:all 0.2s;"
+          placeholder="Tell us what you think..."
+          onfocus="this.style.borderColor='var(--accent)'; this.style.boxShadow='0 0 0 3px rgba(245,197,24,0.08)'"
+          onblur="this.style.borderColor='rgba(255,255,255,0.1)'; this.style.boxShadow='none'"
+        ></textarea>
+      </div>
+      <button type="submit" style="padding:14px; background:var(--accent); border:none; border-radius:10px; color:#0a0a0f; font-size:15px; font-weight:700; font-family:'Space Grotesk',sans-serif; cursor:pointer; transition:all 0.2s;">
+        Submit Feedback
+      </button>
+    </form>
+  </div>
+</div>
+
+<!-- Dropdown menu for mobile feedback -->
+<div id="feedback-btn" style="display:none;"></div>
+
+<script>
+  let allAnime = [];
+  let targetAnime = null;
+  let fuse = null;
+  let currentMode = 'daily';
+  let guesses = [];
+  let gameEnded = false;
+  let revealedLetterIndices = new Set(); // tracks which letter positions are revealed
+
+  // DOM
+  const searchInput = document.getElementById('search-input');
+  const searchResults = document.getElementById('search-results');
+  const guessesContainer = document.getElementById('guesses-container');
+  const streakCounter = document.getElementById('streak-counter');
+  const dailyBtn = document.getElementById('daily-mode-btn');
+  const unlimitedBtn = document.getElementById('unlimited-mode-btn');
+  const gameOverContainer = document.getElementById('game-over-container');
+  const gameOverTitle = document.getElementById('game-over-title');
+  const gameOverDesc = document.getElementById('game-over-desc');
+  const targetRevealImg = document.getElementById('target-reveal-img');
+  const targetRevealName = document.getElementById('target-reveal-name');
+  const playAgainBtn = document.getElementById('play-again-btn');
+  const yesterdayBanner = document.getElementById('yesterday-banner');
+  const yesterdayImg = document.getElementById('yesterday-img');
+  const yesterdayTitle = document.getElementById('yesterday-title');
+
+  function updateHP() {
+    for (let i = 1; i <= 10; i++) {
+      const seg = document.getElementById(`hp-${i}`);
+      if (!seg) continue;
+      // HP fills from left to right. If we have 10 guesses left (0 used), all 10 are filled.
+      if (i > 10 - guesses.length) {
+        seg.classList.add('lost');
+      } else {
+        seg.classList.remove('lost');
+      }
+    }
+  }
+
+  async function init() {
+    if (typeof ALL_ANIME_DATA === 'undefined') { console.error('No anime data'); return; }
+    allAnime = ALL_ANIME_DATA;
+    fuse = new Fuse(allAnime, { keys: ['title', 'genre'], threshold: 0.3 });
+    setupEvents();
+    loadState();
+    updateStreakUI();
+  }
+
+  function getTarget(type) {
+    if (type === 'daily') return getDailyTarget(allAnime);
+    if (type === 'yesterday') return getYesterdayTarget(allAnime);
+  }
+
+  // ── Mystery Panel ──────────────────────────────────────────
+  function buildLetterSkeleton(title) {
+    const skeleton = document.getElementById('letter-skeleton');
+    if (!skeleton) return;
+    skeleton.innerHTML = '';
+    revealedLetterIndices = new Set();
+    for (let i = 0; i < title.length; i++) {
+      const ch = title[i];
+      const slot = document.createElement('div');
+      if (ch === ' ') {
+        slot.className = 'letter-slot space';
+      } else {
+        slot.className = 'letter-slot';
+        slot.dataset.char = ch;
+        slot.dataset.idx = i;
+        slot.textContent = '';
+      }
+      skeleton.appendChild(slot);
+    }
+  }
+
+  function updateMysteryPanel() {
+    const guessCount = guesses.length;
+    const title = targetAnime.title;
+
+    // 1. Update blurred image
+    const img = document.getElementById('mystery-img');
+    const label = document.getElementById('mystery-img-label');
+    if (img) {
+      img.src = targetAnime.imageUrl;
+      // Start at blur(40px), reduce by ~4px per guess, min 0
+      const blurPx = Math.max(0, 40 - guessCount * 4.5);
+      const brightness = Math.min(1, 0.6 + guessCount * 0.04);
+      img.style.filter = `blur(${blurPx.toFixed(1)}px) brightness(${brightness.toFixed(2)})`;
+      if (blurPx === 0) {
+        label.textContent = '✓ Revealed!';
+        label.style.color = 'var(--accent)';
+      } else {
+        label.textContent = `${Math.round((1 - blurPx/40)*100)}% clear`;
+      }
+    }
+
+    // 2. Reveal letters at guess 3, 6, 9
+    const skeleton = document.getElementById('letter-skeleton');
+    const hint = document.getElementById('mystery-hint');
+    if (!skeleton) return;
+
+    const letterSlots = [...skeleton.querySelectorAll('.letter-slot:not(.space)')];
+    const unrevealedIdxs = letterSlots
+      .map((s, i) => i)
+      .filter(i => !revealedLetterIndices.has(i));
+
+    // How many to reveal: +2 at guess 3, +2 at guess 6, +3 at guess 9
+    let toRevealCount = 0;
+    if (guessCount === 3) toRevealCount = 2;
+    else if (guessCount === 6) toRevealCount = 2;
+    else if (guessCount === 9) toRevealCount = 3;
+
+    if (toRevealCount > 0 && unrevealedIdxs.length > 0) {
+      // Randomly pick indices to reveal
+      const shuffled = unrevealedIdxs.sort(() => Math.random() - 0.5);
+      const picks = shuffled.slice(0, Math.min(toRevealCount, shuffled.length));
+      picks.forEach((slotIdx, delay) => {
+        setTimeout(() => {
+          const slot = letterSlots[slotIdx];
+          if (slot) {
+            slot.textContent = slot.dataset.char.toUpperCase();
+            slot.classList.add('revealed', 'just-revealed');
+            revealedLetterIndices.add(slotIdx);
+            setTimeout(() => slot.classList.remove('just-revealed'), 600);
+          }
+        }, delay * 150);
+      });
+
+      const msgs = {
+        3: '🔤 Letters revealed after 3 guesses!',
+        6: '🔤 More letters revealed after 6 guesses!',
+        9: '🔤 Almost there — final letters revealed!'
+      };
+      if (hint && msgs[guessCount]) {
+        hint.innerHTML = `<span class="hint-reveal">${msgs[guessCount]}</span>`;
+      }
+    } else if (guessCount > 0 && guessCount !== 3 && guessCount !== 6 && guessCount !== 9 && hint) {
+      const pct = Math.round((1 - Math.max(0, 40 - guessCount*4.5)/40)*100);
+      hint.textContent = `Image ${pct}% revealed · Letters unlock at guess 3, 6, 9`;
+    } else if (guessCount === 0 && hint) {
+      hint.textContent = 'AWAITING INPUT...';
+    }
+  }
+
+  function resetMysteryPanel() {
+    const img = document.getElementById('mystery-img');
+    const label = document.getElementById('mystery-img-label');
+    const hint = document.getElementById('mystery-hint');
+    if (img) { img.src = ''; img.style.filter = 'blur(40px) brightness(0.7)'; }
+    if (label) { label.textContent = '? Blurred'; label.style.color = ''; }
+    if (hint) hint.textContent = 'TARGET LOCKED. AWAITING INPUT.';
+    revealedLetterIndices = new Set();
+  }
+  // ────────────────────────────────────────────────────────────
+
+  function startNewGame(mode, forceRestart = false) {
+    currentMode = mode;
+    guesses = [];
+    gameEnded = false;
+    guessesContainer.innerHTML = '';
+    gameOverContainer.classList.remove('show');
+    searchInput.disabled = false;
+    searchInput.value = '';
+    resetMysteryPanel();
+
+    if (mode === 'daily') {
+      targetAnime = getTarget('daily');
+      dailyBtn.classList.add('active');
+      unlimitedBtn.classList.remove('active');
+      buildLetterSkeleton(targetAnime.title);
+      playAgainBtn.style.display = 'none';
+      showYesterdayBanner();
+    } else {
+      if (forceRestart) sessionStorage.removeItem('unlimited_state');
+      targetAnime = allAnime[Math.floor(Math.random() * allAnime.length)];
+      unlimitedBtn.classList.add('active');
+      dailyBtn.classList.remove('active');
+      buildLetterSkeleton(targetAnime.title);
+      playAgainBtn.style.display = 'inline-flex';
+      yesterdayBanner.classList.remove('show');
+    }
+    updateHP();
+    loadState(forceRestart);
+  }
+
+  function showYesterdayBanner() {
+    const y = getTarget('yesterday');
+    if (y) {
+      yesterdayImg.src = y.imageUrl || '';
+      yesterdayTitle.textContent = y.title;
+      yesterdayBanner.classList.add('show');
+    }
+  }
+
+  function saveState() {
+    if (currentMode === 'daily') {
+      const today = getISTDateString(0);
+      localStorage.setItem('daily_state', JSON.stringify({ date: today, guesses: guesses.map(g => g.title), gameEnded }));
+    } else {
+      sessionStorage.setItem('unlimited_state', JSON.stringify({ target: targetAnime.title, guesses: guesses.map(g => g.title), gameEnded }));
+    }
+  }
+
+  function loadState(forceRestart = false) {
+    if (forceRestart) return; // Don't load state if we are explicitly starting fresh
+    guessesContainer.innerHTML = '';
+    guesses = [];
+    gameEnded = false;
+    if (currentMode === 'daily') {
+      const today = getISTDateString(0);
+      const stateStr = localStorage.getItem('daily_state');
+      if (stateStr) {
+        const state = JSON.parse(stateStr);
+        if (state.date === today) {
+          targetAnime = getTarget('daily');
+          buildLetterSkeleton(targetAnime.title);
+          state.guesses.forEach(gTitle => {
+            const a = allAnime.find(x => x.title === gTitle);
+            if (a) makeGuess(a, true);
+          });
+        } else {
+          checkStreakReset();
+        }
+      }
+    } else {
+      const stateStr = sessionStorage.getItem('unlimited_state');
+      if (stateStr) {
+        const state = JSON.parse(stateStr);
+        const saved = allAnime.find(a => a.title === state.target);
+        if (saved) {
+          targetAnime = saved;
+          buildLetterSkeleton(targetAnime.title);
+          state.guesses.forEach(gTitle => {
+            const a = allAnime.find(x => x.title === gTitle);
+            if (a) makeGuess(a, true);
+          });
+        }
+      }
+    }
+    updateHP();
+  }
+
+  function checkStreakReset() {
+    const lastWin = localStorage.getItem('last_win_date');
+    if (lastWin) {
+      const today = new Date(getISTDateString(0));
+      const last = new Date(lastWin);
+      if (Math.floor((today - last) / 86400000) > 1) {
+        localStorage.setItem('daily_streak', '0');
+        updateStreakUI();
+      }
+    }
+  }
+
+  function updateStreakUI() {
+    streakCounter.textContent = localStorage.getItem('daily_streak') || '0';
+  }
+
+  function handleWinLoss(won) {
+    gameEnded = true;
+    searchInput.disabled = true;
+    gameOverContainer.classList.add('show');
+    targetRevealImg.src = targetAnime.imageUrl;
+    targetRevealName.textContent = targetAnime.title;
+
+    let total = parseInt(localStorage.getItem('total_games_played') || '0') + 1;
+    localStorage.setItem('total_games_played', total);
+
+    if (won) {
+      gameOverTitle.textContent = 'YOU GOT IT!';
+      gameOverTitle.className = 'game-over-title win';
+      gameOverDesc.textContent = `Guessed in ${guesses.length} ${guesses.length === 1 ? 'try' : 'tries'}. Legendary!`;
+      confetti({ particleCount: 180, spread: 80, origin: { y: 0.5 }, colors: ['#f5c518','#fff','#4ade80'] });
+      if (currentMode === 'daily') {
+        let streak = parseInt(localStorage.getItem('daily_streak') || '0') + 1;
+        localStorage.setItem('daily_streak', streak);
+        localStorage.setItem('last_win_date', getISTDateString(0));
+        updateStreakUI();
+      }
+    } else {
+      gameOverTitle.textContent = 'GAME OVER';
+      gameOverTitle.className = 'game-over-title lose';
+      gameOverDesc.textContent = 'Out of guesses! The anime was:';
+      if (currentMode === 'daily') { localStorage.setItem('daily_streak', '0'); updateStreakUI(); }
+    }
+    saveState();
+  }
+
+  function setupEvents() {
+    dailyBtn.addEventListener('click', () => startNewGame('daily'));
+    unlimitedBtn.addEventListener('click', () => startNewGame('unlimited'));
+    playAgainBtn.addEventListener('click', () => startNewGame('unlimited', true));
+
+    searchInput.addEventListener('input', e => {
+      const val = e.target.value.trim();
+      if (val.length < 2) { searchResults.classList.remove('visible'); return; }
+      const results = fuse.search(val).slice(0, 6);
+      renderSearch(results);
+    });
+
+    document.addEventListener('click', e => {
+      if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+        searchResults.classList.remove('visible');
+      }
+    });
+
+    // How to Play Modal
+    const howToModal = document.getElementById('how-to-modal');
+    document.getElementById('how-to-btn').addEventListener('click', () => howToModal.classList.add('show'));
+    document.getElementById('modal-close-btn').addEventListener('click', () => howToModal.classList.remove('show'));
+    howToModal.addEventListener('click', e => { if (e.target === howToModal) howToModal.classList.remove('show'); });
+
+    // Cursor Particles
+    document.addEventListener('mousemove', e => {
+      // Only generate particles occasionally to prevent lag
+      if (Math.random() > 0.8) return;
+      const particle = document.createElement('div');
+      particle.className = 'cursor-particle';
+      particle.style.left = (e.clientX - 3) + 'px';
+      particle.style.top = (e.clientY - 3) + 'px';
+      document.body.appendChild(particle);
+      setTimeout(() => particle.remove(), 800);
+    });
+  }
+
+  function renderSearch(results) {
+    searchResults.innerHTML = '';
+    if (!results.length) { searchResults.classList.remove('visible'); return; }
+    results.forEach(r => {
+      const a = r.item;
+      const div = document.createElement('div');
+      div.className = 'search-result-item';
+      div.innerHTML = `
+        <img class="search-result-img" src="${a.imageUrl}" alt="${a.title}" onerror="this.style.display='none'">
+        <div>
+          <div class="search-result-title">${a.title}</div>
+          <div class="search-result-meta">${a.year} · ${a.genre}</div>
         </div>
-    </header>
+      `;
+      div.addEventListener('click', () => {
+        if (gameEnded) return;
+        searchInput.value = '';
+        searchResults.classList.remove('visible');
+        makeGuess(a);
+      });
+      searchResults.appendChild(div);
+    });
+    searchResults.classList.add('visible');
+  }
 
-    <main class="relative z-10 w-full max-w-[960px] mx-auto px-4 pt-32 pb-32 min-h-screen flex flex-col items-center text-center">
-        
-        <!-- Yesterday's Target Banner -->
-        <div id="yesterday-banner" class="hidden w-full max-w-2xl bg-surface-variant/80 border border-red-900/50 rounded-xl p-4 mb-8 flex-col items-center gap-2 animate-fade-in shadow-[0_0_15px_rgba(153,27,27,0.3)]">
-            <span class="font-label-caps text-xs text-outline">Yesterday's Target</span>
-            <div class="flex items-center gap-4">
-                <img id="yesterday-img" src="" class="w-10 h-10 rounded-full object-cover">
-                <span id="yesterday-title" class="font-headline-md text-lg text-on-surface"></span>
-            </div>
+  function parseNum(str) {
+    if (!str || str === 'Unknown') return null;
+    const m = str.match(/\d+/);
+    return m ? parseInt(m[0]) : null;
+  }
+
+  function compareAttr(gVal, tVal, type) {
+    if (gVal == tVal) return { status: 'match', arrow: '' };
+    let status = 'miss', arrow = '';
+    if (type === 'year') {
+      const g = parseInt(gVal), t = parseInt(tVal);
+      if (g && t) { if (Math.abs(g - t) <= 3) status = 'partial'; arrow = g < t ? 'up' : 'down'; }
+    } else if (type === 'episodes') {
+      const g = parseNum(gVal), t = parseNum(tVal);
+      if (g && t) { if (Math.abs(g - t) <= t * 0.1) status = 'partial'; arrow = g < t ? 'up' : 'down'; }
+    } else if (type === 'rank') {
+      const g = parseNum(gVal), t = parseNum(tVal);
+      if (g && t) { arrow = g > t ? 'up' : 'down'; }
+    }
+    return { status, arrow };
+  }
+
+  function createAttrBox(label, value, result, delayIdx, restoring) {
+    const delay = restoring ? 0 : delayIdx * 120;
+    const arrowIcon = result.arrow === 'up' ? '↑' : result.arrow === 'down' ? '↓' : '';
+    return `
+      <div class="attr-box-wrap">
+        <div class="attr-box-inner ${restoring ? 'flipped' : ''}" id="attr-${Date.now()}-${delayIdx}" data-delay="${delay}" data-restoring="${restoring}">
+          <div class="attr-face attr-front">
+            <span class="material-symbols-outlined" style="color:rgba(255,255,255,0.15); font-size:22px;">help</span>
+          </div>
+          <div class="attr-face attr-back ${result.status}">
+            <div class="attr-label">${label}</div>
+            <div class="attr-value ${result.status}">${value} ${arrowIcon}</div>
+          </div>
         </div>
+      </div>
+    `;
+  }
 
-        <div class="w-full max-w-2xl text-center mb-12 flex flex-col items-center gap-4 animate-cinematic">
-            <h2 class="text-[50px] md:text-[80px] font-black leading-tight tracking-[0.05em] text-transparent relative z-10" style="-webkit-text-stroke: 2px rgba(255,255,255,0.9); text-shadow: 0 0 40px rgba(255,255,255,0.3);">
-                GUESS THE ANIME
-            </h2>
-            <p class="font-body-lg text-on-surface opacity-90 drop-shadow-md">Type an anime title below. You have 10 tries to reveal the target based on 6 attributes.</p>
+  function makeGuess(anime, restoring = false) {
+    guesses.push(anime);
+    const idx = guesses.length;
+
+    const cYear  = compareAttr(anime.year,        targetAnime.year,        'year');
+    const cEps   = compareAttr(anime.episodes,    targetAnime.episodes,    'episodes');
+    const cRank  = compareAttr(anime.rank,        targetAnime.rank,        'rank');
+    const cGen   = { status: anime.lead_gender === targetAnime.lead_gender ? 'match' : 'miss', arrow: '' };
+    const cGenre = { status: anime.genre         === targetAnime.genre     ? 'match' : 'miss', arrow: '' };
+    const cStudio= { status: anime.studio        === targetAnime.studio    ? 'match' : 'miss', arrow: '' };
+
+    const card = document.createElement('div');
+    card.className = 'guess-card';
+    card.innerHTML = `
+      <div class="guess-card-header">
+        <img class="guess-card-img" src="${anime.imageUrl}" alt="${anime.title}" onerror="this.style.display='none'">
+        <div>
+          <div class="guess-card-title">${anime.title}</div>
+          <div class="guess-card-num">Guess ${idx} of 10</div>
         </div>
+      </div>
+      <div class="attr-grid">
+        ${createAttrBox('Year',     anime.year,                cYear,  0, restoring)}
+        ${createAttrBox('Episodes', anime.episodes,            cEps,   1, restoring)}
+        ${createAttrBox('Rank',     '#' + anime.rank,          cRank,  2, restoring)}
+        ${createAttrBox('Gender',   anime.lead_gender,         cGen,   3, restoring)}
+        ${createAttrBox('Genre',    anime.genre,               cGenre, 4, restoring)}
+        ${createAttrBox('Studio',   anime.studio,              cStudio,5, restoring)}
+      </div>
+    `;
 
-        <!-- Search input container -->
-        <div class="w-full max-w-2xl relative mb-12">
-            <div class="relative group">
-                <input id="search-input" type="text" placeholder="Search for an anime..." class="w-full bg-surface-container-high/50 border border-outline-variant/50 focus:border-tertiary-fixed focus:ring-1 focus:ring-tertiary-fixed rounded-none p-6 pl-14 text-lg font-body-lg text-on-surface placeholder:text-outline transition-all glass-input">
-                <span class="material-symbols-outlined absolute left-5 top-1/2 -translate-y-1/2 text-outline group-focus-within:text-tertiary-fixed transition-colors">search</span>
-            </div>
-            
-            <div id="search-results" class="absolute top-full left-0 w-full mt-2 bg-surface-container-high border border-outline-variant/30 shadow-2xl rounded-xl overflow-hidden hidden z-50 flex flex-col max-h-[300px] overflow-y-auto">
-                <!-- Results dynamically populated here -->
-            </div>
-        </div>
+    guessesContainer.prepend(card);
+    updateHP();
 
-        <div id="game-over-container" class="hidden w-full max-w-2xl mb-8 flex-col items-center justify-center p-8 glass-card rounded-2xl animate-fade-in text-center">
-            <h3 id="game-over-title" class="font-display-xl text-4xl mb-4 text-on-surface"></h3>
-            <p id="game-over-desc" class="font-body-lg text-outline mb-6"></p>
-            <div class="flex items-center gap-4">
-                <img id="target-reveal-img" src="" class="w-20 h-20 rounded-full object-cover shadow-lg border border-white/10">
-                <div class="text-left">
-                    <h4 id="target-reveal-name" class="font-headline-lg text-2xl text-on-surface"></h4>
-                </div>
-            </div>
-            <button id="play-again-btn" class="mt-8 px-8 py-3 glow-button glass-card text-on-surface rounded-full font-label-caps uppercase tracking-widest hover:bg-white/10 transition-colors hidden font-semibold border border-white/20">Play Again</button>
-        </div>
+    // Screen Shake for misses
+    if (!restoring && anime.title !== targetAnime.title) {
+      document.body.classList.add('shake');
+      setTimeout(() => document.body.classList.remove('shake'), 400);
+    }
 
-        <!-- Guesses Container -->
-        <div id="guesses-container" class="w-full flex flex-col gap-8">
-            <!-- Dynamically populated -->
-        </div>
+    // Update mystery panel after each guess
+    if (!restoring) {
+      updateMysteryPanel();
+    } else {
+      // On restore, silently apply all updates without animations
+      const img = document.getElementById('mystery-img');
+      if (img) {
+        img.src = targetAnime.imageUrl;
+        const blurPx = Math.max(0, 40 - guesses.length * 4.5);
+        img.style.filter = `blur(${blurPx.toFixed(1)}px) brightness(${Math.min(1, 0.6+guesses.length*0.04).toFixed(2)})`;
+      }
+      // Silently reveal letters for restored state
+      const skeleton = document.getElementById('letter-skeleton');
+      if (skeleton) {
+        const letterSlots = [...skeleton.querySelectorAll('.letter-slot:not(.space)')];
+        let totalToReveal = 0;
+        if (guesses.length >= 3) totalToReveal += 2;
+        if (guesses.length >= 6) totalToReveal += 2;
+        if (guesses.length >= 9) totalToReveal += 3;
+        if (totalToReveal > 0) {
+          const shuffled = letterSlots.map((s,i) => i).sort(() => Math.random() - 0.5);
+          shuffled.slice(0, Math.min(totalToReveal, shuffled.length)).forEach(idx => {
+            const slot = letterSlots[idx];
+            if (slot) { slot.textContent = slot.dataset.char.toUpperCase(); slot.classList.add('revealed'); revealedLetterIndices.add(idx); }
+          });
+        }
+      }
+    }
 
-    </main>
+    if (!restoring) {
+      const boxes = card.querySelectorAll('.attr-box-inner');
+      boxes.forEach(box => {
+        const delay = parseInt(box.dataset.delay || 0);
+        setTimeout(() => box.classList.add('flipped'), delay + 80);
+      });
+      saveState();
+    }
 
-    <script src="app.js"></script>
+    if (anime.title === targetAnime.title) {
+      if (!restoring) setTimeout(() => handleWinLoss(true), 900);
+      else handleWinLoss(true);
+    } else if (guesses.length >= 10) {
+      if (!restoring) setTimeout(() => handleWinLoss(false), 900);
+      else handleWinLoss(false);
+    }
+  }
+
+  // Feedback modal
+  const feedbackModal = document.getElementById('feedback-modal');
+  document.getElementById('close-feedback-btn').addEventListener('click', () => {
+    feedbackModal.classList.remove('open');
+  });
+  feedbackModal.addEventListener('click', e => { if (e.target === feedbackModal) feedbackModal.classList.remove('open'); });
+  document.getElementById('feedback-form').addEventListener('submit', e => {
+    e.preventDefault();
+    const text = document.getElementById('feedback-text').value.trim();
+    if (!text) return;
+    alert('Thank you for your feedback!');
+    feedbackModal.classList.remove('open');
+    document.getElementById('feedback-text').value = '';
+  });
+
+  // Keyboard shortcut
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') feedbackModal.classList.remove('open');
+  });
+
+  // Start
+  init().then(() => startNewGame('daily'));
+</script>
 </body>
 </html>
