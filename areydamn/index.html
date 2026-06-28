@@ -750,17 +750,73 @@
     }
 
     @media (max-width: 768px) {
-      .grid-2 {
-        grid-template-columns: 1fr;
-      }
+      .grid-2 { grid-template-columns: 1fr; }
     }
 
-    .hero-title { font-family: 'Press Start 2P', cursive !important; font-size: clamp(30px, 8vw, 80px) !important; letter-spacing: 2px !important; }
+    .hero-title { font-family: 'Press Start 2P', cursive !important; font-size: clamp(28px, 7vw, 80px) !important; letter-spacing: 2px !important; }
     .hero-subtitle { font-family: 'Press Start 2P', cursive !important; font-size: 10px !important; letter-spacing: 1px !important; line-height: 1.8 !important; }
     .btn-primary { font-family: 'Press Start 2P', cursive !important; font-size: 12px !important; letter-spacing: 2px; }
     .btn-secondary { font-family: 'Press Start 2P', cursive !important; font-size: 10px !important; letter-spacing: 2px; }
     .logo-text { font-family: 'Press Start 2P', cursive !important; font-size: 16px !important; letter-spacing: 2px !important; }
     .hero-badge { font-family: 'Press Start 2P', cursive !important; font-size: 8px !important; letter-spacing: 1px; }
+
+    /* ===================== MOBILE RESPONSIVE ===================== */
+    @media (max-width: 600px) {
+
+      /* Nav */
+      .nav-logo { font-size: 10px; letter-spacing: 1px; }
+      .nav-btn { padding: 7px 10px; font-size: 7px; gap: 4px; }
+      .nav-label { display: none; }
+
+      /* Hero */
+      .hero-section { padding: 90px 16px 48px; }
+      .hero-title { font-size: clamp(22px, 9vw, 48px) !important; }
+      .hero-subtitle { font-size: 8px !important; max-width: 280px; }
+      .hero-badge { font-size: 7px !important; padding: 5px 12px; }
+      .hero-cta { padding: 14px 28px; font-size: 14px; }
+      .hero-stats { gap: 24px; margin-top: 40px; flex-wrap: wrap; justify-content: center; }
+      .hero-stat-num { font-size: 32px; }
+
+      /* Content */
+      .content-wrap { padding: 0 14px 80px; }
+
+      /* Section headers */
+      .section-label { font-size: 9px; }
+
+      /* Glass panels */
+      .glass-panel { border-radius: 10px; }
+
+      /* How To Play grid: 2 cols on mobile */
+      .content-wrap section > div > div[style*="grid-template-columns:repeat(auto-fit"] {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 12px !important;
+      }
+
+      /* Fact items */
+      .fact-num { font-size: 22px; min-width: 30px; }
+      .fact-text { font-size: 12px; }
+
+      /* Quiz grid: 1 col on mobile */
+      #quiz-options { grid-template-columns: 1fr !important; }
+
+      /* Stats modal */
+      .modal-card { padding: 28px 20px; }
+
+      /* Bottom nav visible on mobile */
+      .bottom-nav { display: flex !important; }
+      .hero-cta { font-size: 12px; padding: 14px 24px; letter-spacing: 0.02em; }
+
+      /* Yesterday strip */
+      #landing-yesterday { font-size: 8px !important; }
+    }
+
+    @media (max-width: 400px) {
+      .hero-title { font-size: 20px !important; }
+      .nav-logo { font-size: 9px; }
+      .content-wrap section > div > div[style*="grid-template-columns:repeat(auto-fit"] {
+        grid-template-columns: 1fr !important;
+      }
+    }
   </style>
 </head>
 
@@ -797,10 +853,10 @@
         <span class="nav-logo">ANIDAMN</span>
       </div>
 
-      <div style="display:flex; align-items:center; gap:10px;">
+      <div style="display:flex; align-items:center; gap:8px;">
         <button id="stats-btn" class="nav-btn" title="Statistics">
           <span class="material-symbols-outlined" style="font-size:18px;">bar_chart</span>
-          <span style="font-size:13px;">Stats</span>
+          <span class="nav-label">Stats</span>
         </button>
         <button id="login-btn" class="nav-btn" title="Sign In">
           <span id="user-icon" class="material-symbols-outlined" style="font-size:18px;">person</span>
@@ -808,7 +864,7 @@
         </button>
         <a href="gameplay.html" class="nav-btn nav-btn-accent">
           <span class="material-symbols-outlined" style="font-size:18px;">play_arrow</span>
-          Play Now
+          <span class="nav-label">Play</span>
         </a>
       </div>
     </div>
