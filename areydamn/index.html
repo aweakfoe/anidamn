@@ -13,11 +13,11 @@
     rel="stylesheet">
   <style>
     :root {
-      --accent: #f5c518;
-      --accent-glow: rgba(245, 197, 24, 0.3);
+      --accent: #ffffff;
+      --accent-glow: rgba(255, 255, 255, 0.25);
       --accent2: #e05c5c;
       --glass-bg: rgba(10, 10, 15, 0.55);
-      --glass-border: rgba(255, 255, 255, 0.07);
+      --glass-border: rgba(255, 255, 255, 0.12);
     }
 
     * {
@@ -57,57 +57,74 @@
 
     /* Nav */
     .nav-glass {
-      background: rgba(8, 8, 16, 0.5);
+      background: rgba(8, 8, 16, 0.75);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--glass-border);
+      border-bottom: 2px solid rgba(255,255,255,0.1);
     }
 
     .nav-logo {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 28px;
-      letter-spacing: 0.1em;
-      background: linear-gradient(135deg, #ffffff, var(--accent));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      font-family: 'Press Start 2P', cursive;
+      font-size: 14px;
+      color: #ffffff;
       text-decoration: none;
+      letter-spacing: 2px;
+      text-shadow: 0 0 20px rgba(255,255,255,0.4), 2px 2px 0 rgba(0,0,0,0.8);
+      transition: text-shadow 0.2s;
+    }
+    .nav-logo:hover {
+      text-shadow: 0 0 30px rgba(255,255,255,0.7), 2px 2px 0 rgba(0,0,0,0.8);
     }
 
+    /* Game-style buttons */
     .nav-btn {
       display: flex;
       align-items: center;
       gap: 6px;
-      padding: 8px 16px;
-      border-radius: 100px;
-      border: 1px solid var(--glass-border);
-      background: rgba(255, 255, 255, 0.04);
-      color: #c8c8d8;
-      font-size: 13px;
-      font-weight: 500;
+      padding: 8px 14px;
+      border-radius: 4px;
+      border: 1px solid rgba(255,255,255,0.25);
+      border-bottom: 3px solid rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.06);
+      color: rgba(255,255,255,0.8);
+      font-size: 8px;
+      font-weight: 400;
+      letter-spacing: 1px;
+      text-transform: uppercase;
       cursor: pointer;
-      transition: all 0.2s;
-      font-family: 'Space Grotesk', sans-serif;
+      transition: all 0.1s;
+      font-family: 'Press Start 2P', cursive;
+      position: relative;
+      top: 0;
     }
-
     .nav-btn:hover {
-      background: rgba(255, 255, 255, 0.09);
-      border-color: rgba(255, 255, 255, 0.15);
+      background: rgba(255,255,255,0.12);
+      border-color: rgba(255,255,255,0.4);
+      border-bottom-color: rgba(255,255,255,0.25);
       color: #fff;
+    }
+    .nav-btn:active {
+      top: 2px;
+      border-bottom-width: 1px;
+      box-shadow: none;
     }
 
     .nav-btn-accent {
-      background: var(--accent);
-      border-color: var(--accent);
+      background: rgba(255,255,255,0.9);
+      border-color: rgba(255,255,255,0.9);
+      border-bottom: 3px solid rgba(180,180,180,0.9);
       color: #0a0a0f;
-      font-weight: 700;
     }
-
     .nav-btn-accent:hover {
-      background: #ffd44a;
-      border-color: #ffd44a;
+      background: #ffffff;
+      border-color: #ffffff;
+      border-bottom-color: rgba(200,200,200,0.9);
       color: #0a0a0f;
-      box-shadow: 0 0 24px var(--accent-glow);
+      box-shadow: 0 0 20px rgba(255,255,255,0.25);
+    }
+    .nav-btn-accent:active {
+      top: 2px;
+      border-bottom-width: 1px;
     }
 
     /* Hero */
@@ -128,9 +145,9 @@
       gap: 8px;
       padding: 6px 16px;
       border-radius: 100px;
-      border: 1px solid rgba(245, 197, 24, 0.3);
-      background: rgba(245, 197, 24, 0.08);
-      color: var(--accent);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.06);
+      color: rgba(255, 255, 255, 0.8);
       font-size: 12px;
       font-weight: 600;
       letter-spacing: 0.15em;
@@ -140,7 +157,7 @@
     }
 
     .hero-title {
-      font-family: 'Bebas Neue', sans-serif;
+      font-family: 'Press Start 2P', cursive !important;
       font-size: clamp(80px, 18vw, 180px);
       line-height: 0.9;
       letter-spacing: 0.05em;
@@ -169,7 +186,7 @@
       gap: 12px;
       padding: 18px 48px;
       border-radius: 100px;
-      background: var(--accent);
+      background: rgba(255, 255, 255, 0.92);
       color: #0a0a0f;
       font-family: 'Space Grotesk', sans-serif;
       font-size: 18px;
@@ -177,7 +194,7 @@
       text-decoration: none;
       letter-spacing: 0.05em;
       transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-      box-shadow: 0 0 40px var(--accent-glow), 0 4px 20px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 0 40px rgba(255,255,255,0.15), 0 4px 20px rgba(0, 0, 0, 0.4);
       animation: fadeSlideUp 0.8s ease 0.8s both;
       position: relative;
       overflow: hidden;
@@ -187,14 +204,15 @@
       content: '';
       position: absolute;
       inset: 0;
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), transparent);
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.3), transparent);
       opacity: 0;
       transition: opacity 0.3s;
     }
 
     .hero-cta:hover {
       transform: translateY(-3px) scale(1.03);
-      box-shadow: 0 0 60px rgba(245, 197, 24, 0.5), 0 8px 30px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 0 60px rgba(255, 255, 255, 0.3), 0 8px 30px rgba(0, 0, 0, 0.4);
+      background: #ffffff;
     }
 
     .hero-cta:hover::before {
@@ -219,7 +237,7 @@
     .hero-stat-num {
       font-family: 'Bebas Neue', sans-serif;
       font-size: 42px;
-      color: var(--accent);
+      color: #ffffff;
       line-height: 1;
     }
 
@@ -362,7 +380,7 @@
     .fact-num {
       font-family: 'Bebas Neue', sans-serif;
       font-size: 32px;
-      color: rgba(245, 197, 24, 0.3);
+      color: rgba(255, 255, 255, 0.25);
       line-height: 1;
       min-width: 40px;
     }
@@ -375,7 +393,7 @@
     }
 
     .fact-text strong {
-      color: var(--accent);
+      color: rgba(255, 255, 255, 0.95);
       font-weight: 600;
     }
 
@@ -383,22 +401,31 @@
     .quiz-option {
       width: 100%;
       text-align: left;
-      padding: 14px 18px;
-      border-radius: 12px;
+      padding: 12px 14px;
+      border-radius: 4px;
       background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.07);
-      color: rgba(255, 255, 255, 0.8);
-      font-size: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-bottom: 3px solid rgba(255, 255, 255, 0.06);
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 11px;
       font-family: 'Outfit', sans-serif;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.1s;
+      position: relative;
+      top: 0;
+      letter-spacing: 0.02em;
     }
 
     .quiz-option:hover:not(:disabled) {
       background: rgba(255, 255, 255, 0.09);
-      border-color: rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 255, 255, 0.25);
+      border-bottom-color: rgba(255, 255, 255, 0.12);
       color: #fff;
-      transform: translateY(-1px);
+    }
+
+    .quiz-option:active:not(:disabled) {
+      top: 2px;
+      border-bottom-width: 1px;
     }
 
     /* Dropdown menu */
@@ -544,15 +571,15 @@
     }
 
     .form-input:focus {
-      border-color: var(--accent);
-      background: rgba(245, 197, 24, 0.04);
-      box-shadow: 0 0 0 3px rgba(245, 197, 24, 0.08);
+      border-color: rgba(255, 255, 255, 0.4);
+      background: rgba(255, 255, 255, 0.04);
+      box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.08);
     }
 
     .form-btn {
       width: 100%;
       padding: 14px;
-      background: var(--accent);
+      background: rgba(255, 255, 255, 0.9);
       border: none;
       border-radius: 10px;
       color: #0a0a0f;
@@ -565,8 +592,8 @@
     }
 
     .form-btn:hover {
-      background: #ffd44a;
-      box-shadow: 0 0 24px var(--accent-glow);
+      background: #ffffff;
+      box-shadow: 0 0 24px rgba(255, 255, 255, 0.2);
     }
 
     /* Stats */
@@ -574,7 +601,7 @@
       font-family: 'Bebas Neue', sans-serif;
       font-size: 56px;
       line-height: 1;
-      color: var(--accent);
+      color: #ffffff;
     }
 
     /* Bottom nav */
@@ -611,8 +638,8 @@
 
     .bottom-nav-item.active,
     .bottom-nav-item:hover {
-      color: var(--accent);
-      background: rgba(245, 197, 24, 0.08);
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.08);
     }
 
     /* Animations */
@@ -829,191 +856,264 @@
     <div class="content-wrap">
 
       <!-- Yesterday's Reveal -->
-      <div class="yesterday-strip" style="padding:0; margin-bottom:48px; text-align:center;">
-        <div class="yesterday-pill" style="display:inline-flex;">
-          <div class="dot"></div>
-          <span class="label">Yesterday's Anime</span>
-          <span style="color:rgba(255,255,255,0.2);">|</span>
-          <span class="value" id="landing-yesterday">Loading...</span>
+      <div style="text-align:center; margin-bottom:56px;">
+        <div style="
+          display:inline-flex;
+          align-items:center;
+          gap:14px;
+          padding:14px 28px;
+          border-radius:6px;
+          border: 1px solid rgba(255,255,255,0.15);
+          border-bottom: 3px solid rgba(255,255,255,0.08);
+          background: rgba(255,255,255,0.04);
+          backdrop-filter: blur(12px);
+        ">
+          <span class="material-symbols-outlined" style="font-size:16px; color:rgba(255,255,255,0.5);">history</span>
+          <span style="font-family:'Press Start 2P',cursive; font-size:8px; color:rgba(255,255,255,0.4); letter-spacing:1px;">YESTERDAY</span>
+          <span style="width:1px; height:16px; background:rgba(255,255,255,0.1);"></span>
+          <span id="landing-yesterday" style="font-family:'Press Start 2P',cursive; font-size:9px; color:#fff; letter-spacing:1px;">Loading...</span>
         </div>
       </div>
 
-      <!-- Two column grid -->
-      <div class="grid-2">
-
-        <!-- ANIME FACTS -->
-        <section>
-          <div class="section-label">
-            <span class="material-symbols-outlined" style="font-size:14px; color:var(--accent);">lightbulb</span>
-            Did You Know
-          </div>
-          <div class="glass-panel" style="padding:28px;">
-            <h2 class="section-title" style="margin-bottom:20px;">10 Wild Anime Facts</h2>
-            <div
-              style="display:flex; flex-direction:column; gap:10px; max-height:480px; overflow-y:auto; padding-right:8px;">
-
-              <div class="fact-item">
-                <div class="fact-num">01</div>
-                <p class="fact-text"><strong>Spirited Away</strong> is the only anime film to ever win an Academy Award
-                  (Best Animated Feature, 2003).</p>
-              </div>
-              <div class="fact-item">
-                <div class="fact-num">02</div>
-                <p class="fact-text"><strong>Demon Slayer: Mugen Train</strong> became the highest-grossing anime film
-                  ever, earning over $500M worldwide.</p>
-              </div>
-              <div class="fact-item">
-                <div class="fact-num">03</div>
-                <p class="fact-text">Over <strong>60% of the world's</strong> animation-based content is anime. Japan
-                  dominates the industry.</p>
-              </div>
-              <div class="fact-item">
-                <div class="fact-num">04</div>
-                <p class="fact-text"><strong>Sazae-san</strong> is the longest running anime series — over 7,500
-                  episodes since 1969. Insane.</p>
-              </div>
-              <div class="fact-item">
-                <div class="fact-num">05</div>
-                <p class="fact-text"><strong>Studio Ghibli</strong> gets its name from the Arabic word for the hot
-                  Saharan desert wind.</p>
-              </div>
-              <div class="fact-item">
-                <div class="fact-num">06</div>
-                <p class="fact-text">The titans in <strong>Attack on Titan</strong> were inspired by a drunk person
-                  creator Isayama saw in an internet cafe.</p>
-              </div>
-              <div class="fact-item">
-                <div class="fact-num">07</div>
-                <p class="fact-text"><strong>One Piece</strong> holds the Guinness World Record for the most copies ever
-                  published by a single author.</p>
-              </div>
-              <div class="fact-item">
-                <div class="fact-num">08</div>
-                <p class="fact-text">The first anime to air in the US was <strong>Astro Boy</strong> back in 1963. OG.
-                </p>
-              </div>
-              <div class="fact-item">
-                <div class="fact-num">09</div>
-                <p class="fact-text"><strong>Death Note</strong> was briefly banned in China after students started
-                  writing teachers' names in fake death notes.</p>
-              </div>
-              <div class="fact-item">
-                <div class="fact-num">10</div>
-                <p class="fact-text">The Pizza Hut placements in <strong>Code Geass</strong> were part of an actual
-                  real-world marketing deal in Japan.</p>
-              </div>
-
-            </div>
-          </div>
-        </section>
-
-        <!-- MINI QUIZ -->
-        <section>
-          <div class="section-label">
-            <span class="material-symbols-outlined" style="font-size:14px; color:var(--accent);">quiz</span>
-            Test Yourself
-          </div>
-          <div class="glass-panel" style="padding:28px; min-height:400px; display:flex; flex-direction:column;">
-            <h2 class="section-title" style="margin-bottom:20px;">Anime Trivia</h2>
-
-            <div id="quiz-container" style="flex:1; display:flex; flex-direction:column; justify-content:center;">
-              <!-- Progress bar -->
-              <div style="display:flex; align-items:center; gap:12px; margin-bottom:24px;">
-                <div
-                  style="flex:1; height:3px; background:rgba(255,255,255,0.08); border-radius:99px; overflow:hidden;">
-                  <div id="quiz-progress-bar"
-                    style="height:100%; background:var(--accent); width:0%; transition:width 0.4s;"></div>
-                </div>
-                <span id="quiz-progress-text"
-                  style="font-size:12px; color:rgba(255,255,255,0.4); font-variant-numeric:tabular-nums;">1/5</span>
-              </div>
-
-              <h3 id="quiz-question"
-                style="font-size:17px; font-weight:600; color:#fff; line-height:1.5; margin-bottom:20px;">Loading...
-              </h3>
-
-              <div id="quiz-options" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;"></div>
-
-              <div id="quiz-feedback"
-                style="display:none; margin-top:16px; padding:12px 16px; border-radius:10px; text-align:center; font-size:14px; font-weight:600;">
-              </div>
-
-              <button id="quiz-next-btn"
-                style="display:none; margin-top:16px; padding:12px 24px; border-radius:100px; background:var(--accent); border:none; color:#0a0a0f; font-weight:700; font-family:'Space Grotesk',sans-serif; cursor:pointer; transition:all 0.2s; font-size:14px;">
-                Next Question →
-              </button>
-            </div>
-
-            <!-- Score -->
-            <div id="quiz-score-display"
-              style="margin-top:20px; padding-top:16px; border-top:1px solid rgba(255,255,255,0.06); display:flex; justify-content:space-between; align-items:center;">
-              <span style="font-size:13px; color:rgba(255,255,255,0.35);">Score</span>
-              <span id="quiz-score-text"
-                style="font-family:'Bebas Neue',sans-serif; font-size:24px; color:var(--accent);">0 / 5</span>
-            </div>
-          </div>
-        </section>
-
-      </div>
-
-      <!-- HOW TO PLAY -->
-      <section style="margin-top:64px;">
-        <div class="section-label">
-          <span class="material-symbols-outlined" style="font-size:14px; color:var(--accent);">help</span>
-          How It Works
+      <!-- HOW TO PLAY — moved above grid -->
+      <section style="margin-bottom:56px;">
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:24px;">
+          <span style="font-family:'Press Start 2P',cursive; font-size:9px; color:rgba(255,255,255,0.4); letter-spacing:1px;">// HOW TO PLAY</span>
+          <div style="flex:1; height:1px; background:linear-gradient(to right, rgba(255,255,255,0.12), transparent);"></div>
         </div>
-        <div class="glass-panel" style="padding:40px;">
-          <h2 class="section-title" style="text-align:center; margin-bottom:40px;">How to Play ANIDAMN</h2>
-          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:24px;">
+        <div style="
+          background: rgba(10,10,20,0.6);
+          border: 1px solid rgba(255,255,255,0.1);
+          border-radius:8px;
+          padding:36px 32px;
+          position:relative;
+          overflow:hidden;
+        ">
+          <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.02),transparent);pointer-events:none;"></div>
+          <h2 style="font-family:'Press Start 2P',cursive; font-size:14px; color:#fff; text-align:center; margin-bottom:36px; letter-spacing:2px; text-shadow:2px 2px 0 rgba(0,0,0,0.8);">HOW TO PLAY</h2>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:20px;">
 
-            <div
-              style="text-align:center; padding:24px; border-radius:14px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.04);">
-              <div
-                style="width:52px; height:52px; border-radius:14px; background:rgba(245,197,24,0.12); border:1px solid rgba(245,197,24,0.2); display:flex; align-items:center; justify-content:center; margin:0 auto 16px;">
-                <span class="material-symbols-outlined" style="font-size:24px; color:var(--accent);">search</span>
+            <div style="
+              text-align:center;
+              padding:24px 16px;
+              border-radius:6px;
+              background:rgba(255,255,255,0.03);
+              border:1px solid rgba(255,255,255,0.08);
+              border-bottom:3px solid rgba(255,255,255,0.05);
+            ">
+              <div style="
+                width:48px; height:48px;
+                border-radius:4px;
+                background:rgba(255,255,255,0.06);
+                border:1px solid rgba(255,255,255,0.12);
+                display:flex; align-items:center; justify-content:center;
+                margin:0 auto 16px;
+              ">
+                <span class="material-symbols-outlined" style="font-size:22px; color:#fff;">search</span>
               </div>
-              <h3 style="font-weight:700; font-size:15px; margin-bottom:8px; color:#fff;">Search an Anime</h3>
-              <p style="font-size:13px; color:rgba(255,255,255,0.45); line-height:1.6;">Type any anime name in the
-                search bar and select your guess.</p>
+              <div style="font-family:'Press Start 2P',cursive; font-size:8px; color:#fff; margin-bottom:10px; line-height:1.6;">SEARCH</div>
+              <p style="font-size:12px; color:rgba(255,255,255,0.45); line-height:1.7;">Type any anime name and pick your guess from the dropdown.</p>
             </div>
 
-            <div
-              style="text-align:center; padding:24px; border-radius:14px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.04);">
-              <div
-                style="width:52px; height:52px; border-radius:14px; background:rgba(245,197,24,0.12); border:1px solid rgba(245,197,24,0.2); display:flex; align-items:center; justify-content:center; margin:0 auto 16px;">
-                <span class="material-symbols-outlined" style="font-size:24px; color:var(--accent);">view_module</span>
+            <div style="
+              text-align:center;
+              padding:24px 16px;
+              border-radius:6px;
+              background:rgba(255,255,255,0.03);
+              border:1px solid rgba(255,255,255,0.08);
+              border-bottom:3px solid rgba(255,255,255,0.05);
+            ">
+              <div style="
+                width:48px; height:48px;
+                border-radius:4px;
+                background:rgba(255,255,255,0.06);
+                border:1px solid rgba(255,255,255,0.12);
+                display:flex; align-items:center; justify-content:center;
+                margin:0 auto 16px;
+              ">
+                <span class="material-symbols-outlined" style="font-size:22px; color:#fff;">view_module</span>
               </div>
-              <h3 style="font-weight:700; font-size:15px; margin-bottom:8px; color:#fff;">Read the Clues</h3>
-              <p style="font-size:13px; color:rgba(255,255,255,0.45); line-height:1.6;">6 attributes flip to reveal how
-                close your guess is to the target.</p>
+              <div style="font-family:'Press Start 2P',cursive; font-size:8px; color:#fff; margin-bottom:10px; line-height:1.6;">READ CLUES</div>
+              <p style="font-size:12px; color:rgba(255,255,255,0.45); line-height:1.7;">6 attributes flip to show how close your guess is.</p>
             </div>
 
-            <div
-              style="text-align:center; padding:24px; border-radius:14px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.04);">
-              <div
-                style="width:52px; height:52px; border-radius:14px; background:rgba(245,197,24,0.12); border:1px solid rgba(245,197,24,0.2); display:flex; align-items:center; justify-content:center; margin:0 auto 16px;">
-                <span class="material-symbols-outlined" style="font-size:24px; color:var(--accent);">emoji_events</span>
+            <div style="
+              text-align:center;
+              padding:24px 16px;
+              border-radius:6px;
+              background:rgba(255,255,255,0.03);
+              border:1px solid rgba(255,255,255,0.08);
+              border-bottom:3px solid rgba(255,255,255,0.05);
+            ">
+              <div style="
+                width:48px; height:48px;
+                border-radius:4px;
+                background:rgba(255,255,255,0.06);
+                border:1px solid rgba(255,255,255,0.12);
+                display:flex; align-items:center; justify-content:center;
+                margin:0 auto 16px;
+              ">
+                <span class="material-symbols-outlined" style="font-size:22px; color:#4ade80;">check_circle</span>
               </div>
-              <h3 style="font-weight:700; font-size:15px; margin-bottom:8px; color:#fff;">Guess in 10 or Less</h3>
-              <p style="font-size:13px; color:rgba(255,255,255,0.45); line-height:1.6;">Green = match, yellow = close,
-                grey = miss. Identify the anime!</p>
+              <div style="font-family:'Press Start 2P',cursive; font-size:8px; color:#fff; margin-bottom:10px; line-height:1.6;">DECODE</div>
+              <p style="font-size:12px; color:rgba(255,255,255,0.45); line-height:1.7;">🟢 Match &nbsp;🟡 Close &nbsp;⬜ Miss — 10 guesses max.</p>
             </div>
 
-            <div
-              style="text-align:center; padding:24px; border-radius:14px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.04);">
-              <div
-                style="width:52px; height:52px; border-radius:14px; background:rgba(245,197,24,0.12); border:1px solid rgba(245,197,24,0.2); display:flex; align-items:center; justify-content:center; margin:0 auto 16px;">
-                <span class="material-symbols-outlined"
-                  style="font-size:24px; color:var(--accent);">local_fire_department</span>
+            <div style="
+              text-align:center;
+              padding:24px 16px;
+              border-radius:6px;
+              background:rgba(255,255,255,0.03);
+              border:1px solid rgba(255,255,255,0.08);
+              border-bottom:3px solid rgba(255,255,255,0.05);
+            ">
+              <div style="
+                width:48px; height:48px;
+                border-radius:4px;
+                background:rgba(255,255,255,0.06);
+                border:1px solid rgba(255,255,255,0.12);
+                display:flex; align-items:center; justify-content:center;
+                margin:0 auto 16px;
+              ">
+                <span class="material-symbols-outlined" style="font-size:22px; color:#f87171;">local_fire_department</span>
               </div>
-              <h3 style="font-weight:700; font-size:15px; margin-bottom:8px; color:#fff;">Build Your Streak</h3>
-              <p style="font-size:13px; color:rgba(255,255,255,0.45); line-height:1.6;">Come back daily. New anime every
-                day. Keep the streak alive!</p>
+              <div style="font-family:'Press Start 2P',cursive; font-size:8px; color:#fff; margin-bottom:10px; line-height:1.6;">STREAK</div>
+              <p style="font-size:12px; color:rgba(255,255,255,0.45); line-height:1.7;">New anime every day. Come back daily to keep your streak.</p>
             </div>
 
           </div>
         </div>
       </section>
+
+      <!-- Two column grid: Did You Know + Anime Trivia -->
+      <div class="grid-2">
+
+        <!-- DID YOU KNOW -->
+        <section>
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:20px;">
+            <span style="font-family:'Press Start 2P',cursive; font-size:9px; color:rgba(255,255,255,0.4); letter-spacing:1px;">// DID YOU KNOW</span>
+            <div style="flex:1; height:1px; background:linear-gradient(to right, rgba(255,255,255,0.12), transparent);"></div>
+          </div>
+          <div style="
+            background:rgba(10,10,20,0.6);
+            border:1px solid rgba(255,255,255,0.1);
+            border-radius:8px;
+            padding:28px;
+          ">
+            <h2 style="font-family:'Press Start 2P',cursive; font-size:11px; color:#fff; margin-bottom:20px; letter-spacing:1px; text-shadow:2px 2px 0 rgba(0,0,0,0.8);">10 WILD FACTS</h2>
+            <div style="display:flex; flex-direction:column; gap:10px; max-height:480px; overflow-y:auto; padding-right:6px;">
+
+              <div class="fact-item">
+                <div class="fact-num">01</div>
+                <p class="fact-text"><strong>Spirited Away</strong> is the only anime film to ever win an Academy Award (Best Animated Feature, 2003).</p>
+              </div>
+              <div class="fact-item">
+                <div class="fact-num">02</div>
+                <p class="fact-text"><strong>Demon Slayer: Mugen Train</strong> became the highest-grossing anime film ever, earning over $500M worldwide.</p>
+              </div>
+              <div class="fact-item">
+                <div class="fact-num">03</div>
+                <p class="fact-text">Over <strong>60% of the world's</strong> animation-based content is anime. Japan dominates the industry.</p>
+              </div>
+              <div class="fact-item">
+                <div class="fact-num">04</div>
+                <p class="fact-text"><strong>Sazae-san</strong> is the longest running anime — over 7,500 episodes since 1969.</p>
+              </div>
+              <div class="fact-item">
+                <div class="fact-num">05</div>
+                <p class="fact-text"><strong>Studio Ghibli</strong> gets its name from the Arabic word for the hot Saharan desert wind.</p>
+              </div>
+              <div class="fact-item">
+                <div class="fact-num">06</div>
+                <p class="fact-text">The titans in <strong>Attack on Titan</strong> were inspired by a drunk person creator Isayama saw in an internet cafe.</p>
+              </div>
+              <div class="fact-item">
+                <div class="fact-num">07</div>
+                <p class="fact-text"><strong>One Piece</strong> holds the Guinness World Record for most copies published by a single author.</p>
+              </div>
+              <div class="fact-item">
+                <div class="fact-num">08</div>
+                <p class="fact-text">The first anime to air in the US was <strong>Astro Boy</strong> back in 1963. OG.</p>
+              </div>
+              <div class="fact-item">
+                <div class="fact-num">09</div>
+                <p class="fact-text"><strong>Death Note</strong> was briefly banned in China after students started writing teachers' names in fake death notes.</p>
+              </div>
+              <div class="fact-item">
+                <div class="fact-num">10</div>
+                <p class="fact-text">The Pizza Hut placements in <strong>Code Geass</strong> were part of an actual real-world marketing deal in Japan.</p>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+        <!-- ANIME TRIVIA QUIZ -->
+        <section>
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:20px;">
+            <span style="font-family:'Press Start 2P',cursive; font-size:9px; color:rgba(255,255,255,0.4); letter-spacing:1px;">// ANIME TRIVIA</span>
+            <div style="flex:1; height:1px; background:linear-gradient(to right, rgba(255,255,255,0.12), transparent);"></div>
+          </div>
+          <div style="
+            background:rgba(10,10,20,0.6);
+            border:1px solid rgba(255,255,255,0.1);
+            border-radius:8px;
+            padding:28px;
+            min-height:400px;
+            display:flex;
+            flex-direction:column;
+          ">
+            <h2 style="font-family:'Press Start 2P',cursive; font-size:11px; color:#fff; margin-bottom:20px; letter-spacing:1px; text-shadow:2px 2px 0 rgba(0,0,0,0.8);">QUIZ TIME</h2>
+
+            <div id="quiz-container" style="flex:1; display:flex; flex-direction:column; justify-content:center;">
+              <!-- Progress bar -->
+              <div style="display:flex; align-items:center; gap:12px; margin-bottom:24px;">
+                <div style="flex:1; height:4px; background:rgba(255,255,255,0.08); border-radius:2px; overflow:hidden;">
+                  <div id="quiz-progress-bar" style="height:100%; background:#fff; width:0%; transition:width 0.4s;"></div>
+                </div>
+                <span id="quiz-progress-text" style="font-family:'Press Start 2P',cursive; font-size:8px; color:rgba(255,255,255,0.4);">1/5</span>
+              </div>
+
+              <h3 id="quiz-question" style="font-size:15px; font-weight:600; color:#fff; line-height:1.6; margin-bottom:20px;">Loading...</h3>
+
+              <div id="quiz-options" style="display:grid; grid-template-columns:1fr 1fr; gap:8px;"></div>
+
+              <div id="quiz-feedback" style="display:none; margin-top:16px; padding:12px 16px; border-radius:6px; text-align:center; font-family:'Press Start 2P',cursive; font-size:9px; line-height:1.8;"></div>
+
+              <button id="quiz-next-btn" style="
+                display:none;
+                margin-top:16px;
+                padding:12px 24px;
+                border-radius:4px;
+                background:rgba(255,255,255,0.9);
+                border:1px solid rgba(255,255,255,0.9);
+                border-bottom:3px solid rgba(180,180,180,0.9);
+                color:#0a0a0f;
+                font-family:'Press Start 2P',cursive;
+                font-size:9px;
+                letter-spacing:1px;
+                cursor:pointer;
+                transition:all 0.1s;
+                position:relative;
+                top:0;
+              "
+              onmouseover="this.style.background='#fff'" 
+              onmouseout="this.style.background='rgba(255,255,255,0.9)'" 
+              onmousedown="this.style.top='2px';this.style.borderBottomWidth='1px'" 
+              onmouseup="this.style.top='0';this.style.borderBottomWidth='3px'">
+                NEXT &gt;
+              </button>
+            </div>
+
+            <!-- Score -->
+            <div id="quiz-score-display" style="margin-top:20px; padding-top:16px; border-top:1px solid rgba(255,255,255,0.08); display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-family:'Press Start 2P',cursive; font-size:8px; color:rgba(255,255,255,0.35);">SCORE</span>
+              <span id="quiz-score-text" style="font-family:'Press Start 2P',cursive; font-size:14px; color:#fff;">0 / 5</span>
+            </div>
+          </div>
+        </section>
+
+      </div>
 
     </div>
   </main>
